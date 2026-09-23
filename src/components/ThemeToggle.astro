@@ -30,10 +30,8 @@ const moon = iconSvg("moon", 18);
 
   function currentTheme(): "light" | "dark" {
     const attr = document.documentElement.getAttribute("data-theme");
-    if (attr === "light" || attr === "dark") return attr;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
+    if (attr === "dark") return "dark";
+    return "light";
   }
 
   function wire() {

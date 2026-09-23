@@ -48,7 +48,7 @@ const menuIcon = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" st
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -64,15 +64,11 @@ const menuIcon = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" st
     <script is:inline>
       (function () {
         try {
-          var k = "tf-theme";
-          var s = localStorage.getItem(k);
-          var t =
-            s === "light" || s === "dark"
-              ? s
-              : window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-          document.documentElement.setAttribute("data-theme", t);
+          var s = localStorage.getItem("tf-theme");
+          document.documentElement.setAttribute(
+            "data-theme",
+            s === "dark" ? "dark" : "light",
+          );
         } catch (e) {
           document.documentElement.setAttribute("data-theme", "light");
         }
