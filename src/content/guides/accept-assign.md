@@ -1,0 +1,52 @@
+---
+id: "accept-assign"
+group: "bookings"
+title: "Accept & Assign"
+blurb: "Accept before Assign; Reject if needed"
+badge: "Core"
+badgeClass: ""
+goal: "Accept a pending booking, then assign driver, vehicle, and greeter."
+image: "/images/booking-assign.png"
+icon: "assign"
+steps:
+  - "From Bookings, open a pending booking (Ride Details)."
+  - "Review route, time, and fleet income amount."
+  - "Accept when your fleet will take the trip — before Assign."
+  - "Tap Assign and choose driver, vehicle, and greeter if required."
+  - "Use Reject only when you will not take the booking."
+points:
+  - id: "accept-before-assign"
+    title: "Accept before Assign"
+    tease: "Order matters"
+    body: "For bookings in PENDING ACCEPTANCE (or similar), Accept first so the fleet claims the trip. Assign comes after — picking driver, vehicle, and greeter. You cannot meaningfully finish assignment until the booking is accepted when the UI requires it."
+    icon: "check"
+    tip: "If you only see Reject and Assign, follow the buttons present on your build; some states skip a separate Accept."
+    related:
+      - "bookings-list"
+  - id: "fleet-income"
+    title: "Fleet income amount"
+    tease: "What the fleet earns on this trip"
+    body: "Ride Details shows the fleet income for this booking. Confirm it matches your commercial expectation before Accept. This is the amount associated with the fleet side of the trip, not necessarily the passenger fare line-by-line."
+    icon: "money"
+    related:
+      - "earnings"
+  - id: "reject"
+    title: "Reject"
+    tease: "Decline the booking for your fleet"
+    body: "Reject releases the booking when you cannot or will not fulfill it. Use it sparingly — it is final for your fleet on that offer. Prefer Accept + Assign when you have capacity."
+    icon: "x"
+    tip: "Double-check date/time and location before rejecting."
+    warn: true
+    related:
+      - "bookings-list"
+  - id: "assign-people"
+    title: "Assign driver / vehicle / greeter"
+    tease: "Complete the crew for the trip"
+    body: "Assign opens pickers for driver and vehicle, and greeter when the trip needs meet-and-greet. Choose an online, nearby driver when possible (check Live Map first). Confirm plate matches the car that will show up."
+    icon: "assign"
+    related:
+      - "live-map"
+      - "drivers"
+      - "vehicles"
+      - "greeters"
+---

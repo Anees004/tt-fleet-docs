@@ -1,0 +1,21 @@
+---
+interface Props {
+  steps: string[];
+}
+
+const { steps } = Astro.props;
+---
+
+<div class="steps-block">
+  <h2>Steps</h2>
+  <ol class="step-list">
+    {
+      steps.map((step) => (
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true" />
+          <div class="step-body">{step}</div>
+        </li>
+      ))
+    }
+  </ol>
+</div>

@@ -1,0 +1,95 @@
+---
+import HelpLayout from "../../../layouts/HelpLayout.astro";
+import PhoneFrame from "../../../components/PhoneFrame.astro";
+import { getCollection, getEntry } from "astro:content";
+import { iconSvg } from "../../../lib/icons";
+
+export async function getStaticPaths() {
+  const guides = await getCollection("guides");
+  return guides.flatMap((g) =>
+    (g.data.points || []).map((p) => ({
+      params: { task: g.data.id, point: p.id },
+    })),
+  );
+}
+
+const { task, point } = Astro.params;
+const entry = await getEntry("guides", task!);
+if (!entry) {
+  return Astro.redirect("/");
+}
+
+const d = entry.data;
+const pt = (d.points || []).find((p) => p.id === point);
+if (!pt) {
+  return Astro.redirect(`/guides/${d.id}/`);
+}
+
+const relatedGuides = await getCollection("guides");
+const relatedById = Object.fromEntries(
+  relatedGuides.map((g) => [g.data.id, g.data.title]),
+);
+
+const backIcon = iconSvg("chevron", 14);
+const paras = pt.body.split(/\n+/).filter(Boolean);
+---
+
+<HelpLayout title={pt.title} activeId={d.id} description={pt.body}>
+  <div class="detail-view">
+    <a class="detail-back" href={`/guides/${d.id}/`}>
+      <span class="chevron-back" set:html={backIcon} />
+      Back to {d.title}
+    </a>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Overview</a>
+      <span class="sep">/</span>
+      <a href={`/guides/${d.id}/`}>{d.title}</a>
+      <span class="sep">/</span>
+      <span>{pt.title}</span>
+    </nav>
+
+    <article class="detail-panel">
+      <h1>{pt.title}</h1>
+      <div class="detail-body">
+        {paras.map((p) => <p>{p}</p>)}
+      </div>
+
+      {
+        pt.tip && (
+          <div class:list={["callout", { warn: pt.warn }]}>
+            <strong>{pt.warn ? "Watch out" : "Tip"}</strong>
+            {pt.tip}
+          </div>
+        )
+      }
+
+      {
+        pt.related && pt.related.length > 0 && (
+          <div class="related">
+            <h2>Related</h2>
+            <div class="chip-row">
+              {pt.related.map((rid) => {
+                const title = relatedById[rid];
+                if (!title) return null;
+                return (
+                  <a class="chip" href={`/guides/${rid}/`}>
+                    {title}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        )
+      }
+    </article>
+
+    {
+      pt.image && (
+        <div class="detail-shot">
+          <PhoneFrame src={pt.image} alt={`${pt.title} screenshot`} />
+        </div>
+      )
+    }
+  </div>
+</HelpLayout>

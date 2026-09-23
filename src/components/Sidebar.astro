@@ -1,0 +1,91 @@
+---
+import { GROUPS } from "../data/meta";
+import { iconSvg } from "../lib/icons";
+
+interface GuideNav {
+  id: string;
+  group: string;
+  title: string;
+  blurb: string;
+  icon: string;
+  searchText: string;
+}
+
+interface Props {
+  guides: GuideNav[];
+  activeId?: string | null;
+}
+
+const { guides, activeId = null } = Astro.props;
+const searchIcon = iconSvg("search", 18);
+const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
+---
+
+<aside
+  class="sidebar"
+  id="sidebar"
+  aria-label="Help navigation"
+  transition:persist="tf-sidebar"
+>
+  <div class="sidebar-brand">
+    <div class="logo-mark" aria-hidden="true">
+      <img src="/images/logo.png" alt="" width="36" height="36" />
+    </div>
+    <div class="brand-text">
+      <strong>Titan Fleet</strong>
+      <span>Operator help</span>
+    </div>
+    <button
+      type="button"
+      class="icon-btn sidebar-close"
+      id="sidebar-close"
+      aria-label="Close menu"
+      set:html={closeIcon}
+    />
+  </div>
+
+  <div class="sidebar-search">
+    <label class="search-field" for="nav-search">
+      <Fragment set:html={searchIcon} />
+      <input
+        type="search"
+        id="nav-search"
+        placeholder="Search tasks…"
+        autocomplete="off"
+      />
+    </label>
+  </div>
+
+  <nav class="sidebar-nav" id="sidebar-nav" aria-label="Topics">
+    {
+      GROUPS.map((g) => {
+        const items = guides.filter((t) => t.group === g.id);
+        if (!items.length) return null;
+        return (
+          <div class="nav-group" data-group={g.id}>
+            <div class="nav-group-label">{g.label}</div>
+            {items.map((t) => (
+              <a
+                class:list={["nav-item", { "is-active": t.id === activeId }]}
+                href={`/guides/${t.id}/`}
+                data-nav={t.id}
+                data-search={t.searchText}
+              >
+                <span class="nav-icon" set:html={iconSvg(t.icon, 18)} />
+                <span class="nav-item-text">
+                  <strong>{t.title}</strong>
+                  <span>{t.blurb}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        );
+      })
+    }
+    <p class="nav-empty" id="nav-empty">No tasks match that search.</p>
+  </nav>
+
+  <footer class="sidebar-foot">
+    <a class="text-link" id="nav-home" href="/">Overview</a>
+  </footer>
+</aside>

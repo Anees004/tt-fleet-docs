@@ -1,0 +1,23 @@
+---
+interface Props {
+  src?: string | null;
+  alt?: string;
+}
+
+const { src, alt = "" } = Astro.props;
+---
+
+<figure class="phone-frame">
+  <div class="phone-screen">
+    {
+      src ? (
+        <img src={src} alt={alt} loading="lazy" />
+      ) : (
+        <div class="img-missing">
+          <strong>No screenshot</strong>
+          This topic is reference-only.
+        </div>
+      )
+    }
+  </div>
+</figure>

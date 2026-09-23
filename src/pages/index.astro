@@ -1,0 +1,38 @@
+---
+import HelpLayout from "../layouts/HelpLayout.astro";
+import CategoryGrid from "../components/CategoryGrid.astro";
+import WorkflowGrid from "../components/WorkflowGrid.astro";
+import { getCollection } from "astro:content";
+import { GROUPS } from "../data/meta";
+
+const guides = await getCollection("guides");
+
+const byId: Record<string, { id: string; title: string; goal: string }> = {};
+const firstByGroup: Record<string, string> = {};
+
+for (const g of GROUPS) {
+  firstByGroup[g.id] = g.first;
+}
+
+for (const g of guides) {
+  byId[g.data.id] = {
+    id: g.data.id,
+    title: g.data.title,
+    goal: g.data.goal,
+  };
+}
+---
+
+<HelpLayout title="Help center">
+  <section class="hero">
+    <p class="hero-kicker">Titan Fleet</p>
+    <h1>Operator help center</h1>
+    <p>
+      Task-based guides with short steps. Open Explore points on any screen to
+      dig into a specific control or rule.
+    </p>
+  </section>
+
+  <CategoryGrid firstByGroup={firstByGroup} />
+  <WorkflowGrid byId={byId} />
+</HelpLayout>

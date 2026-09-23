@@ -1,0 +1,28 @@
+---
+import { GROUPS } from "../data/meta";
+import { iconSvg } from "../lib/icons";
+
+interface Props {
+  firstByGroup: Record<string, string>;
+}
+
+const { firstByGroup } = Astro.props;
+---
+
+<p class="section-label">Browse by category</p>
+<div class="category-grid">
+  {
+    GROUPS.map((g) => {
+      const href = firstByGroup[g.id]
+        ? `/guides/${firstByGroup[g.id]}/`
+        : "/";
+      return (
+        <a class="category-tile" href={href}>
+          <div class="tile-icon" set:html={iconSvg(g.icon, 18)} />
+          <strong>{g.label}</strong>
+          <span>{g.desc}</span>
+        </a>
+      );
+    })
+  }
+</div>

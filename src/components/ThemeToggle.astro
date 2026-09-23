@@ -1,0 +1,50 @@
+---
+import { iconSvg } from "../lib/icons";
+
+const sun = iconSvg("sun", 18);
+const moon = iconSvg("moon", 18);
+---
+
+<button
+  type="button"
+  class="icon-btn theme-toggle"
+  id="theme-toggle"
+  aria-label="Toggle color theme"
+  title="Toggle light / dark"
+>
+  <span class="icon-sun" set:html={sun} />
+  <span class="icon-moon" set:html={moon} />
+</button>
+
+<script>
+  const KEY = "tf-theme";
+
+  function applyTheme(theme: "light" | "dark") {
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem(KEY, theme);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function currentTheme(): "light" | "dark" {
+    const attr = document.documentElement.getAttribute("data-theme");
+    if (attr === "light" || attr === "dark") return attr;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+
+  function wire() {
+    const btn = document.getElementById("theme-toggle");
+    if (!btn || btn.dataset.wired === "1") return;
+    btn.dataset.wired = "1";
+    btn.addEventListener("click", () => {
+      applyTheme(currentTheme() === "dark" ? "light" : "dark");
+    });
+  }
+
+  wire();
+  document.addEventListener("astro:page-load", wire);
+</script>

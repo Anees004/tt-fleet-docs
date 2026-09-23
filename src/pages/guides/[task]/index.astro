@@ -1,0 +1,50 @@
+---
+import HelpLayout from "../../../layouts/HelpLayout.astro";
+import PhoneFrame from "../../../components/PhoneFrame.astro";
+import StepList from "../../../components/StepList.astro";
+import PointsGrid from "../../../components/PointsGrid.astro";
+import { getCollection, getEntry } from "astro:content";
+import { groupLabel } from "../../../data/meta";
+
+export async function getStaticPaths() {
+  const guides = await getCollection("guides");
+  return guides.map((g) => ({
+    params: { task: g.data.id },
+  }));
+}
+
+const { task } = Astro.params;
+const entry = await getEntry("guides", task!);
+if (!entry) {
+  return Astro.redirect("/");
+}
+
+const d = entry.data;
+const badgeClass = ["badge", d.badgeClass].filter(Boolean).join(" ");
+---
+
+<HelpLayout title={d.title} activeId={d.id} description={d.goal}>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Overview</a>
+    <span class="sep">/</span>
+    <span>{groupLabel(d.group)}</span>
+    <span class="sep">/</span>
+    <span>{d.title}</span>
+  </nav>
+
+  <header class="task-header">
+    <div>
+      {d.badge && <span class={badgeClass}>{d.badge}</span>}
+      <h1>{d.title}</h1>
+      <p class="task-goal">{d.goal}</p>
+    </div>
+  </header>
+
+  <div class="task-layout">
+    <div class="task-copy">
+      <StepList steps={d.steps} />
+      <PointsGrid taskId={d.id} points={d.points} />
+    </div>
+    <PhoneFrame src={d.image} alt={`${d.title} screenshot`} />
+  </div>
+</HelpLayout>

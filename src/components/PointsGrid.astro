@@ -1,0 +1,42 @@
+---
+import { iconSvg } from "../lib/icons";
+
+interface Point {
+  id: string;
+  title: string;
+  tease: string;
+  icon?: string;
+}
+
+interface Props {
+  taskId: string;
+  points: Point[];
+}
+
+const { taskId, points } = Astro.props;
+const chevron = iconSvg("chevron", 16);
+---
+
+{
+  points.length > 0 && (
+    <div class="points-block">
+      <h2>Explore this screen</h2>
+      <p class="points-intro">
+        Tap a point for a plain explanation — what it does, and what it is not
+        for.
+      </p>
+      <div class="points-grid">
+        {points.map((p) => (
+          <a class="point-card" href={`/guides/${taskId}/${p.id}/`}>
+            <span class="point-icon" set:html={iconSvg(p.icon || "spark", 16)} />
+            <span class="point-text">
+              <strong>{p.title}</strong>
+              <span>{p.tease}</span>
+            </span>
+            <span class="point-chevron" set:html={chevron} />
+          </a>
+        ))}
+      </div>
+    </div>
+  )
+}
