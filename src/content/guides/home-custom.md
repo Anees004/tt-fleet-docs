@@ -6,7 +6,7 @@ blurb: "One day or a specific date range"
 badge: "Ref"
 badgeClass: "ref"
 goal: "Use Custom on Home when Last Week (or another preset) is not enough — pick one day or an exact from–to window."
-image: "/images/dh-sim-booted.png"
+image: "/images/home.png"
 icon: "custom"
 steps:
   - "On Home, under Performance, tap Custom (calendar chip)."
@@ -22,7 +22,7 @@ points:
     tip: "If numbers look unfamiliar, check whether Custom is still selected from an earlier session."
     related:
       - "home-dashboard"
-    image: "/images/dh-sim-booted.png"
+    image: "/images/home.png"
   - id: "one-day"
     title: "Select one day"
     tease: "A specific date for hourly detail"
@@ -31,7 +31,7 @@ points:
     tip: "One-day Custom is the path when “Today / Yesterday” is not the day you care about."
     related:
       - "home-dashboard"
-    image: "/images/dh-sim-booted.png"
+    image: "/images/home.png"
   - id: "date-range"
     title: "From–to range"
     tease: "Both ends for a custom window"
@@ -40,7 +40,7 @@ points:
     related:
       - "date-filter"
       - "home-dashboard"
-    image: "/images/dh-sim-booted.png"
+    image: "/images/home.png"
   - id: "same-idea-lists"
     title: "Same idea on lists"
     tease: "Bookings funnel Custom"
