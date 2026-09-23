@@ -3,8 +3,8 @@ export const GROUPS = [
     id: "start",
     label: "Start here",
     icon: "home",
-    desc: "Home, Live Map, menu",
-    first: "home-dashboard",
+    desc: "Sign in, Home, Live Map",
+    first: "sign-in",
   },
   {
     id: "setup",
@@ -40,6 +40,8 @@ export type GroupId = (typeof GROUPS)[number]["id"];
 
 /** Sidebar / browse order (matches original help content). */
 export const GUIDE_ORDER = [
+  "sign-in",
+  "forgot-password",
   "home-dashboard",
   "online-drivers",
   "driver-profile",
