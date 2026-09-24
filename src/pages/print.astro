@@ -381,7 +381,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
       {
         guides.map((entry) => {
           const d = entry.data;
-          const heroHl = getHighlight(d.id);
+          const heroHl = getHighlight(d.id, null, d.image);
           return (
             <article class="guide" id={`guide-${d.id}`}>
               <header class="guide-header">
@@ -417,8 +417,8 @@ const generated = new Date().toLocaleDateString("en-GB", {
                     Explore this screen
                   </h3>
                   {d.points.map((p) => {
-                    const hl = getHighlight(d.id, p.id);
                     const shot = p.image || d.image;
+                    const hl = getHighlight(d.id, p.id, shot);
                     return (
                       <div class="point" id={`point-${d.id}-${p.id}`}>
                         <div class="point-grid">

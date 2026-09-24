@@ -17,7 +17,7 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
     {
       highlight && (
         <div
-          class:list={["hl-box", { "hl-near-top": highlight.y < 8 }]}
+          class="hl-box"
           style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
         >
           <span class="hl-label">{highlight.label}</span>
@@ -59,23 +59,19 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
   }
   .hl-label {
     position: absolute;
-    left: 0;
-    bottom: calc(100% + 6px);
+    left: 4px;
+    top: 4px;
     background: #c45c26;
     color: #fff;
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.02em;
-    padding: 0.2rem 0.45rem;
-    border-radius: 6px;
+    padding: 0.15rem 0.4rem;
+    border-radius: 5px;
     white-space: nowrap;
-    max-width: 180px;
+    max-width: calc(100% - 8px);
     overflow: hidden;
     text-overflow: ellipsis;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
-  .hl-near-top .hl-label {
-    bottom: auto;
-    top: calc(100% + 6px);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
   }
 </style>

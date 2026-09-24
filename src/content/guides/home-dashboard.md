@@ -60,7 +60,7 @@ points:
     tip: "Custom is for exact windows (one busy day, an event weekend, payroll week). Switch back to Last Week when you want the default again."
     related:
       - "home-custom"
-    image: "/images/home.png"
+    image: "/images/dh-sim-booted.png"
   - id: "hourly-charts"
     title: "Earnings & trips charts"
     tease: "See when money and rides happened"
