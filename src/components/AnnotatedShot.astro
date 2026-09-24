@@ -10,36 +10,52 @@ interface Props {
 
 const { src, alt = "", highlight = null, compact = false } = Astro.props;
 
-/** Place label outside the box, still on the screenshot (does not grow image size). */
 type Side = "above" | "below" | "left" | "right";
 
 function labelSide(h: HighlightBox): Side {
-  // Thin control near bottom (e.g. Forgot password) → sit beside, not over Sign in
+  // Tall menus near the top (theme / language) → sit to the side
+  if (h.y < 12 && h.h >= 10) return h.x < 40 ? "right" : "left";
+  // Thin control near bottom → beside (avoid Sign in / other buttons)
   if (h.h <= 5 && h.y >= 55) return h.x >= 45 ? "left" : "right";
-  // Near top edge → below the box
   if (h.y < 9) return "below";
-  // Near bottom edge → above the box
   if (h.y + h.h > 88) return "above";
-  // Wide top strip → below
   if (h.y < 14 && h.w > 50) return "below";
   return "above";
 }
 
-const side = highlight ? labelSide(highlight) : "above";
+function labelInlineStyle(h: HighlightBox, side: Side): string {
+  const { x, y, w, height } = { ...h, height: h.h };
+  const base =
+    "position:absolute;z-index:5;background:#c45c26;color:#fff;" +
+    "font-size:11px;font-weight:700;line-height:1.2;letter-spacing:0.02em;" +
+    "padding:3px 7px;border-radius:5px;white-space:nowrap;" +
+    "box-shadow:0 2px 6px rgba(0,0,0,0.35);pointer-events:none;" +
+    "max-width:48%;overflow:hidden;text-overflow:ellipsis;";
 
-let labelStyle = "";
-if (highlight) {
-  const { x, y, w, h } = highlight;
   if (side === "above") {
-    labelStyle = `left:${x}%;top:${y}%;transform:translateY(calc(-100% - 5px));`;
-  } else if (side === "below") {
-    labelStyle = `left:${x}%;top:${y + h}%;transform:translateY(5px);`;
-  } else if (side === "left") {
-    labelStyle = `left:${x}%;top:${y + h / 2}%;transform:translate(-100%, -50%) translateX(-5px);`;
-  } else {
-    labelStyle = `left:${x + w}%;top:${y + h / 2}%;transform:translateY(-50%) translateX(5px);`;
+    return (
+      base +
+      `left:${x}%;top:${y}%;transform:translateY(calc(-100% - 6px));`
+    );
   }
+  if (side === "below") {
+    return base + `left:${x}%;top:${y + height}%;transform:translateY(6px);`;
+  }
+  if (side === "left") {
+    return (
+      base +
+      `left:${x}%;top:${y + height / 2}%;transform:translate(-100%,-50%) translateX(-6px);`
+    );
+  }
+  // right
+  return (
+    base +
+    `left:${x + w}%;top:${y + height / 2}%;transform:translateY(-50%) translateX(6px);`
+  );
 }
+
+const side = highlight ? labelSide(highlight) : "above";
+const labelStyle = highlight ? labelInlineStyle(highlight, side) : "";
 ---
 
 <figure class:list={["annotated-shot", { compact }]}>
@@ -53,9 +69,7 @@ if (highlight) {
             style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
             aria-hidden="true"
           />
-          <span class:list={["hl-label", `hl-${side}`]} style={labelStyle}>
-            {highlight.label}
-          </span>
+          <span class="hl-label" style={labelStyle}>{highlight.label}</span>
         </>
       )
     }
@@ -88,27 +102,10 @@ if (highlight) {
     z-index: 1;
     border: 2.5px solid #c45c26;
     border-radius: 10px;
+    background: transparent;
     box-shadow:
       0 0 0 9999px rgba(20, 26, 16, 0.28),
       inset 0 0 0 1px rgba(255, 255, 255, 0.35);
     pointer-events: none;
-  }
-  .hl-label {
-    position: absolute;
-    z-index: 3;
-    background: #c45c26;
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 0.22rem 0.45rem;
-    border-radius: 5px;
-    white-space: nowrap;
-    max-width: 55%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-    pointer-events: none;
-    line-height: 1.2;
   }
 </style>
