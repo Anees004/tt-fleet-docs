@@ -1,0 +1,81 @@
+---
+import type { HighlightBox } from "../data/highlights";
+
+interface Props {
+  src: string;
+  alt?: string;
+  highlight?: HighlightBox | null;
+  compact?: boolean;
+}
+
+const { src, alt = "", highlight = null, compact = false } = Astro.props;
+---
+
+<figure class:list={["annotated-shot", { compact }]}>
+  <div class="annotated-frame">
+    <img src={src} alt={alt} loading="lazy" />
+    {
+      highlight && (
+        <div
+          class:list={["hl-box", { "hl-near-top": highlight.y < 8 }]}
+          style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
+        >
+          <span class="hl-label">{highlight.label}</span>
+        </div>
+      )
+    }
+  </div>
+</figure>
+
+<style>
+  .annotated-shot {
+    margin: 0;
+    max-width: 280px;
+  }
+  .annotated-shot.compact {
+    max-width: 220px;
+  }
+  .annotated-frame {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #c0cbb5;
+    box-shadow: 0 8px 24px rgba(47, 61, 40, 0.12);
+    background: #f4f5f2;
+  }
+  .annotated-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .hl-box {
+    position: absolute;
+    border: 2.5px solid #c45c26;
+    border-radius: 10px;
+    box-shadow:
+      0 0 0 9999px rgba(20, 26, 16, 0.28),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+  }
+  .hl-label {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 6px);
+    background: #c45c26;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.2rem 0.45rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+  .hl-near-top .hl-label {
+    bottom: auto;
+    top: calc(100% + 6px);
+  }
+</style>

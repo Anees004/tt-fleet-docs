@@ -340,6 +340,11 @@ a {
   justify-content: space-between;
   gap: 0.5rem;
 }
+.sidebar-foot-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
 .sidebar-foot .theme-toggle {
   color: rgba(255, 255, 255, 0.75);
 }
