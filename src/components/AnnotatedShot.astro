@@ -9,38 +9,29 @@ interface Props {
 }
 
 const { src, alt = "", highlight = null, compact = false } = Astro.props;
-const labelBelow = highlight ? highlight.y < 10 : false;
-const labelStyle = highlight
-  ? labelBelow
-    ? `left:${highlight.x}%;top:${highlight.y + highlight.h}%;`
-    : `left:${highlight.x}%;top:${highlight.y}%;`
-  : "";
 ---
 
 <figure class:list={["annotated-shot", { compact }]}>
-  <div class="annotated-frame">
-    <div class="annotated-media">
-      <img src={src} alt={alt} loading="lazy" />
-      {
-        highlight && (
-          <div
-            class="hl-box"
-            style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
-          />
-        )
-      }
-    </div>
+  <div class="annotated-media">
+    <img src={src} alt={alt} loading="lazy" />
     {
       highlight && (
-        <span
-          class:list={["hl-label", { "hl-label-below": labelBelow }]}
-          style={labelStyle}
-        >
-          {highlight.label}
-        </span>
+        <div
+          class="hl-box"
+          style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
+          aria-hidden="true"
+        />
       )
     }
   </div>
+  {
+    highlight && (
+      <figcaption class="hl-caption">
+        <span class="hl-swatch" aria-hidden="true" />
+        <span class="hl-caption-text">{highlight.label}</span>
+      </figcaption>
+    )
+  }
 </figure>
 
 <style>
@@ -50,10 +41,6 @@ const labelStyle = highlight
   }
   .annotated-shot.compact {
     max-width: 220px;
-  }
-  .annotated-frame {
-    position: relative;
-    overflow: visible;
   }
   .annotated-media {
     position: relative;
@@ -77,25 +64,27 @@ const labelStyle = highlight
       inset 0 0 0 1px rgba(255, 255, 255, 0.35);
     pointer-events: none;
   }
-  .hl-label {
-    position: absolute;
-    z-index: 2;
-    transform: translateY(calc(-100% - 6px));
-    background: #c45c26;
-    color: #fff;
-    font-size: 0.62rem;
+  .hl-caption {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin-top: 0.55rem;
+    font-size: 0.78rem;
     font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 0.15rem 0.4rem;
-    border-radius: 5px;
-    white-space: nowrap;
-    max-width: 90%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-    pointer-events: none;
+    color: #c45c26;
+    line-height: 1.3;
   }
-  .hl-label-below {
-    transform: translateY(6px);
+  .hl-swatch {
+    flex-shrink: 0;
+    width: 0.85rem;
+    height: 0.85rem;
+    margin-top: 0.1rem;
+    border: 2.5px solid #c45c26;
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(196, 92, 38, 0.2);
+    background: rgba(196, 92, 38, 0.12);
+  }
+  .hl-caption-text {
+    min-width: 0;
   }
 </style>
