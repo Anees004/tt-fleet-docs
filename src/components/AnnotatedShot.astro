@@ -9,19 +9,35 @@ interface Props {
 }
 
 const { src, alt = "", highlight = null, compact = false } = Astro.props;
+const labelBelow = highlight ? highlight.y < 10 : false;
+const labelStyle = highlight
+  ? labelBelow
+    ? `left:${highlight.x}%;top:${highlight.y + highlight.h}%;`
+    : `left:${highlight.x}%;top:${highlight.y}%;`
+  : "";
 ---
 
 <figure class:list={["annotated-shot", { compact }]}>
   <div class="annotated-frame">
-    <img src={src} alt={alt} loading="lazy" />
+    <div class="annotated-media">
+      <img src={src} alt={alt} loading="lazy" />
+      {
+        highlight && (
+          <div
+            class="hl-box"
+            style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
+          />
+        )
+      }
+    </div>
     {
       highlight && (
-        <div
-          class="hl-box"
-          style={`left:${highlight.x}%;top:${highlight.y}%;width:${highlight.w}%;height:${highlight.h}%;`}
+        <span
+          class:list={["hl-label", { "hl-label-below": labelBelow }]}
+          style={labelStyle}
         >
-          <span class="hl-label">{highlight.label}</span>
-        </div>
+          {highlight.label}
+        </span>
       )
     }
   </div>
@@ -37,13 +53,17 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
   }
   .annotated-frame {
     position: relative;
+    overflow: visible;
+  }
+  .annotated-media {
+    position: relative;
     border-radius: 16px;
     overflow: hidden;
     border: 1px solid #c0cbb5;
     box-shadow: 0 8px 24px rgba(47, 61, 40, 0.12);
     background: #f4f5f2;
   }
-  .annotated-frame img {
+  .annotated-media img {
     display: block;
     width: 100%;
     height: auto;
@@ -59,8 +79,8 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
   }
   .hl-label {
     position: absolute;
-    left: 4px;
-    top: 4px;
+    z-index: 2;
+    transform: translateY(calc(-100% - 6px));
     background: #c45c26;
     color: #fff;
     font-size: 0.62rem;
@@ -69,9 +89,13 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
     padding: 0.15rem 0.4rem;
     border-radius: 5px;
     white-space: nowrap;
-    max-width: calc(100% - 8px);
+    max-width: 90%;
     overflow: hidden;
     text-overflow: ellipsis;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+  }
+  .hl-label-below {
+    transform: translateY(6px);
   }
 </style>
