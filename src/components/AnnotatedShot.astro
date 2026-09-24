@@ -12,6 +12,14 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
 ---
 
 <figure class:list={["annotated-shot", { compact }]}>
+  {
+    highlight && (
+      <div class="hl-banner">
+        <span class="hl-banner-mark" aria-hidden="true" />
+        <strong class="hl-banner-text">{highlight.label}</strong>
+      </div>
+    )
+  }
   <div class="annotated-media">
     <img src={src} alt={alt} loading="lazy" />
     {
@@ -24,14 +32,6 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
       )
     }
   </div>
-  {
-    highlight && (
-      <p class="hl-caption">
-        <span class="hl-caption-mark">Highlighted</span>
-        {highlight.label}
-      </p>
-    )
-  }
 </figure>
 
 <style is:global>
@@ -42,7 +42,35 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
   .annotated-shot.compact {
     max-width: 220px;
   }
-  .annotated-shot .annotated-media {
+  .hl-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: 100%;
+    margin: 0 0 0.45rem;
+    padding: 0.4rem 0.55rem;
+    background: #c45c26;
+    color: #fff;
+    border-radius: 8px;
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .hl-banner-mark {
+    flex-shrink: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    border: 2px solid #fff;
+    border-radius: 3px;
+    background: transparent;
+  }
+  .hl-banner-text {
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
+  .annotated-media {
     position: relative;
     border-radius: 16px;
     overflow: hidden;
@@ -50,12 +78,12 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
     box-shadow: 0 8px 24px rgba(47, 61, 40, 0.12);
     background: #f4f5f2;
   }
-  .annotated-shot .annotated-media img {
+  .annotated-media img {
     display: block;
     width: 100%;
     height: auto;
   }
-  .annotated-shot .hl-box {
+  .hl-box {
     position: absolute;
     border: 2.5px solid #c45c26;
     border-radius: 10px;
@@ -65,29 +93,5 @@ const { src, alt = "", highlight = null, compact = false } = Astro.props;
     pointer-events: none;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  }
-  .annotated-shot .hl-caption {
-    display: block;
-    margin: 0.55rem 0 0;
-    padding: 0.45rem 0.65rem;
-    background: #c45c26;
-    color: #ffffff !important;
-    font-size: 0.8rem;
-    font-weight: 700;
-    line-height: 1.35;
-    border-radius: 8px;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .annotated-shot .hl-caption-mark {
-    display: inline-block;
-    margin-right: 0.4rem;
-    padding: 0.05rem 0.35rem;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.22);
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
   }
 </style>
