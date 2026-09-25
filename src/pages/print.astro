@@ -200,10 +200,15 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
       .guide-layout {
         display: grid;
-        grid-template-columns: 1fr minmax(280px, 340px);
+        grid-template-columns: 1fr minmax(300px, 340px);
         gap: 1.25rem;
         align-items: start;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
+      }
+      /* Keep intro + large phone on one page; fills what used to be blank half */
+      .guide-intro {
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
       .steps {
         margin: 0;
@@ -236,7 +241,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
       }
 
       .point {
-        /* Allow flow onto the same page as Steps — avoid half-blank guide openers */
+        /* Allow points to share the guide page — avoid was causing half-blank pages */
         break-inside: auto;
         margin: 0.85rem 0;
         padding: 0.75rem 0;
@@ -244,14 +249,15 @@ const generated = new Date().toLocaleDateString("en-GB", {
       }
       .point-grid {
         display: grid;
-        grid-template-columns: 1fr minmax(240px, 290px);
+        grid-template-columns: 1fr minmax(230px, 270px);
         gap: 1rem;
         align-items: start;
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
       .point h3 {
         margin: 0 0 0.25rem;
         font-size: 1.1rem;
-        break-after: avoid;
       }
       .point .tease {
         margin: 0 0 0.5rem;
@@ -327,12 +333,6 @@ const generated = new Date().toLocaleDateString("en-GB", {
         .guide {
           break-before: page;
         }
-        .guide-header {
-          break-after: avoid;
-        }
-        .guide-layout {
-          grid-template-columns: 1fr minmax(300px, 360px) !important;
-        }
         .cover,
         .toc {
           break-after: page;
@@ -341,14 +341,24 @@ const generated = new Date().toLocaleDateString("en-GB", {
           text-decoration: none;
           color: inherit;
         }
+        /* Keep two-column layout in PDF; large hero phone fills guide openers */
+        .guide-layout {
+          grid-template-columns: 1fr minmax(300px, 340px) !important;
+        }
         .point-grid {
-          grid-template-columns: 1fr minmax(250px, 300px) !important;
+          grid-template-columns: 1fr minmax(230px, 270px) !important;
         }
-        .annotated-shot.print-safe {
-          max-width: 360px !important;
+        .guide-layout .annotated-shot.hero {
+          max-width: 340px !important;
         }
-        .annotated-shot.print-safe.compact {
-          max-width: 300px !important;
+        .point-grid .annotated-shot.compact {
+          max-width: 270px !important;
+        }
+        .annotated-media img {
+          /* Sharper, more stable decode in mobile PDF viewers */
+          image-rendering: auto;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
         .hl-box,
         .hl-label,
@@ -426,7 +436,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                 <p class="guide-meta">{groupLabel(d.group)} · {d.blurb}</p>
               </header>
 
-              <div class="guide-layout">
+              <div class="guide-layout guide-intro">
                 <div>
                   <h3 style="font-size:1rem;margin:0 0 0.65rem;font-family:inherit;">
                     Steps
@@ -443,7 +453,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                     alt={`${d.title} screenshot`}
                     highlights={heroHls}
                     eager
-                    printSafe
+                    hero
                   />
                 )}
               </div>
@@ -474,7 +484,6 @@ const generated = new Date().toLocaleDateString("en-GB", {
                               highlights={hls}
                               compact
                               eager
-                              printSafe
                             />
                           )}
                         </div>

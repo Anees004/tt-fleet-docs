@@ -1,9 +1,9 @@
 ---
 import type { HighlightBox } from "../data/highlights";
 
-/** Dark red — print + on-screen highlight accent */
+/** Dark red — readable on light screenshots and in PDF. */
 const HL = "#8B1A1A";
-const HL_SOFT = "rgba(139, 26, 26, 0.1)";
+const HL_SOFT = "rgba(139, 26, 26, 0.08)";
 
 interface Props {
   src: string;
@@ -13,11 +13,8 @@ interface Props {
   compact?: boolean;
   /** Prefer eager for print/PDF so every screenshot is included. */
   eager?: boolean;
-  /**
-   * Print/PDF safe: larger frame, clip overflow, labels always inside
-   * (avoids transform glitches in iOS PDF viewers).
-   */
-  printSafe?: boolean;
+  /** Larger phone for PDF guide hero pages that would otherwise look half-blank. */
+  hero?: boolean;
 }
 
 const {
@@ -27,7 +24,7 @@ const {
   highlights = null,
   compact = false,
   eager = false,
-  printSafe = false,
+  hero = false,
 } = Astro.props;
 
 const boxes: HighlightBox[] =
@@ -41,68 +38,71 @@ const multi = boxes.length > 1;
 
 type Side = "above" | "below" | "left" | "right" | "inside";
 
-function labelSide(h: HighlightBox, index: number): Side {
-  // PDF/iOS: avoid transform-based placements that glitch in Preview
-  if (printSafe) return "inside";
-  if (h.side) return h.side;
-  if (multi) return "inside";
+/** Prefer outside labels; keep inside only for large regions or explicit large boxes. */
+function labelSide(h: HighlightBox): Side {
+  const requested = h.side;
+  const large = h.h >= 20 && h.w >= 50;
+
+  if (requested === "inside" && large) return "inside";
+  if (requested && requested !== "inside") return requested;
+
+  // Outside heuristics (never default multi → inside)
   if (h.y + h.h > 88) return "above";
-  if (h.y < 12 && h.x >= 70 && h.w <= 16) return "left";
-  if (h.y < 12 && h.h >= 10) return h.x < 40 ? "right" : "left";
-  if (h.h <= 5 && h.y >= 55) return h.x >= 45 ? "left" : "right";
-  if (h.y < 9) return "below";
-  if (h.y < 14 && h.w > 50) return "below";
+  if (h.y < 10) return h.x + h.w > 60 ? "left" : "below";
+  if (h.x + h.w >= 72) return "left";
+  if (h.x <= 8) return "right";
+  if (h.h <= 6) return h.y < 45 ? "below" : "above";
+  if (large) return "inside";
   return "above";
 }
 
+/** Avoid CSS transforms where possible — they glitch in some iOS PDF viewers. */
 function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): string {
-  const { x, y, w, height } = { ...h, height: h.h };
-  const shadow =
-    multiMode || printSafe ? "box-shadow:none;" : "box-shadow:0 1px 3px rgba(0,0,0,0.22);";
-  const fontSize = printSafe ? "9px" : "10px";
+  const { x, y, w, h: height } = h;
+  const shadow = multiMode
+    ? "box-shadow:none;"
+    : "box-shadow:0 1px 2px rgba(0,0,0,0.18);";
   const base =
     `position:absolute;z-index:5;background:${HL};color:#fff;` +
-    `font-size:${fontSize};font-weight:700;line-height:1.2;letter-spacing:0.02em;` +
+    "font-size:9px;font-weight:700;line-height:1.15;letter-spacing:0.02em;" +
     "padding:2px 5px;border-radius:3px;white-space:nowrap;" +
     shadow +
     "pointer-events:none;" +
     "max-width:40%;overflow:hidden;text-overflow:ellipsis;";
 
   if (side === "inside") {
-    return base + `left:${x + 1.2}%;top:${y + 1}%;`;
+    return base + `left:${x + 1.5}%;top:${y + 1.2}%;`;
   }
   if (side === "above") {
-    return (
-      base + `left:${x}%;top:${y}%;transform:translateY(calc(-100% - 5px));`
-    );
+    // ~18px above box top — no transform
+    return base + `left:${x}%;top:calc(${y}% - 18px);`;
   }
   if (side === "below") {
-    return base + `left:${x}%;top:${y + height}%;transform:translateY(5px);`;
+    return base + `left:${x}%;top:calc(${y + height}% + 4px);`;
   }
   if (side === "left") {
     return (
       base +
-      `left:${x}%;top:${y + height / 2}%;transform:translate(-100%,-50%) translateX(-5px);`
+      `right:calc(${100 - x}% + 4px);left:auto;top:calc(${y}% + ${height / 2}% - 8px);`
     );
   }
   return (
-    base +
-    `left:${x + w}%;top:${y + height / 2}%;transform:translateY(-50%) translateX(5px);`
+    base + `left:calc(${x + w}% + 4px);top:calc(${y}% + ${height / 2}% - 8px);`
   );
 }
 ---
 
-<figure class:list={["annotated-shot", { compact, "print-safe": printSafe }]}>
+<figure class:list={["annotated-shot", { compact, hero }]}>
   <div class:list={["annotated-media", { multi }]}>
     <img
       src={src}
       alt={alt}
-      loading={eager || printSafe ? "eager" : "lazy"}
-      decoding="async"
+      loading={eager ? "eager" : "lazy"}
+      decoding="sync"
     />
     {
-      boxes.map((box, i) => {
-        const side = labelSide(box, i);
+      boxes.map((box) => {
+        const side = labelSide(box);
         return (
           <>
             <div
@@ -124,26 +124,21 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
   </div>
 </figure>
 
-<style define:vars={{ hl: HL, hlSoft: HL_SOFT }}>
+<style>
   .annotated-shot {
     margin: 0;
     max-width: 280px;
   }
   .annotated-shot.compact {
-    max-width: 220px;
+    max-width: 240px;
   }
-  /* Larger frames for PDF — fill more of the page */
-  .annotated-shot.print-safe {
+  .annotated-shot.hero {
     max-width: 340px;
-    width: 100%;
-  }
-  .annotated-shot.print-safe.compact {
-    max-width: 290px;
   }
   .annotated-media {
     position: relative;
-    border-radius: 12px;
-    overflow: hidden;
+    border-radius: 14px;
+    overflow: visible;
     border: 1px solid #c0cbb5;
     box-shadow: 0 6px 18px rgba(47, 61, 40, 0.1);
     background: #f4f5f2;
@@ -152,19 +147,19 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 11px;
+    border-radius: 13px;
   }
   .hl-box {
     position: absolute;
     z-index: 1;
-    border: 2.5px solid var(--hl);
+    border: 2.5px solid #8b1a1a;
     border-radius: 8px;
-    background: var(--hlSoft);
+    background: rgba(139, 26, 26, 0.07);
     box-shadow: none;
     pointer-events: none;
   }
   .hl-box.multi {
-    background: var(--hlSoft);
+    background: rgba(139, 26, 26, 0.06);
     box-shadow: none;
   }
 </style>

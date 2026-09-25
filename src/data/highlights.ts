@@ -44,10 +44,10 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   /* ---------- Home default (dh-sim-booted.png) — overview uses several boxes ---------- */
   "home-dashboard": [
     { x: 86, y: 7.2, w: 11, h: 4.8, label: "Notifications", side: "left" },
-    { x: 4, y: 12.5, w: 92, h: 16.5, label: "Fleet Status", side: "inside" },
+    { x: 4, y: 12.5, w: 92, h: 16.5, label: "Fleet Status", side: "left" },
     { x: 4, y: 30.5, w: 92, h: 33, label: "Performance", side: "inside" },
     { x: 4, y: 64.5, w: 92, h: 22, label: "Charts", side: "inside" },
-    { x: 1, y: 91, w: 98, h: 8, label: "Bottom menu", side: "inside" },
+    { x: 1, y: 91, w: 98, h: 8, label: "Bottom menu", side: "above" },
   ],
   "home-dashboard/fleet-status": { x: 4, y: 12.5, w: 92, h: 16.5, label: "Fleet Status" },
   "home-dashboard/kpi-cards": { x: 4, y: 39, w: 92, h: 24, label: "KPI cards" },
@@ -75,7 +75,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 88,
     h: 17,
     label: "Deactivate / Remove",
-    side: "inside",
+    side: "above",
   },
   /* driver-vehicles.png — Vehicle Assignment block */
   "driver-profile/vehicles-assign": {
@@ -84,7 +84,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 52,
     label: "Assign / Unassign",
-    side: "inside",
+    side: "above",
   },
   /* driver-documents.png — Documents + Replace */
   "driver-profile/documents": {
@@ -93,7 +93,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 94,
     h: 68,
     label: "Documents",
-    side: "inside",
+    side: "above",
   },
 
   /* ---------- Live map ---------- */
@@ -104,7 +104,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   "menu": { x: 2, y: 7.5, w: 10, h: 4.5, label: "Menu", side: "below" },
   /* Open drawer shot — destinations list */
   "menu/hamburger": { x: 0, y: 12, w: 78, h: 70, label: "Side menu", side: "inside" },
-  "menu/vs-tabs": { x: 1, y: 91, w: 98, h: 8, label: "Bottom tabs", side: "inside" },
+  "menu/vs-tabs": { x: 1, y: 91, w: 98, h: 8, label: "Bottom tabs", side: "above" },
 
   /* ---------- Drivers ---------- */
   "drivers": { x: 4, y: 14, w: 92, h: 60, label: "Drivers list" },
@@ -161,7 +161,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 90,
     h: 14,
     label: "Fleet income",
-    side: "inside",
+    side: "above",
   },
   "accept-assign/reject": { x: 51, y: 50.5, w: 44, h: 5.5, label: "Reject", side: "above" },
   "accept-assign/assign-people": [
@@ -190,9 +190,9 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     { x: 4, y: 12, w: 92, h: 8.5, label: "Month summary", side: "above" },
     // { x: 4, y: 19.5, w: 92, h: 5, label: "All / Pre-booked / Hailing", side: "below" },
     { x: 4, y: 25.5, w: 92, h: 35, label: "Heat map", side: "inside" },
-    { x: 4, y: 61.5, w: 92, h: 9, label: "Quieter → Busier", side: "inside" },
-    { x: 4, y: 73.5, w: 92, h: 10, label: "Day + List / By hour", side: "inside" },
-    { x: 4, y: 84.5, w: 92, h: 6, label: "Hourly bars", side: "inside" },
+    { x: 4, y: 61.5, w: 92, h: 9, label: "Quieter → Busier", side: "left" },
+    { x: 4, y: 73.5, w: 92, h: 10, label: "Day + List / By hour", side: "left" },
+    { x: 4, y: 84.5, w: 92, h: 6, label: "Hourly bars", side: "above" },
     { x: 4, y: 93.5, w: 92, h: 6.5, label: "Job card", side: "above" },
   ],
   "calendar/month-summary": {
@@ -213,16 +213,16 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   },
   "calendar/busy-slots": [
     { x: 4, y: 25.5, w: 92, h: 35, label: "Busy days", side: "inside" },
-    { x: 4, y: 61.5, w: 92, h: 9, label: "Quieter → Busier", side: "inside" },
+    { x: 4, y: 61.5, w: 92, h: 9, label: "Quieter → Busier", side: "left" },
   ],
   "calendar/day-detail": [
-    { x: 4, y: 74.5, w: 92, h: 10, label: "Day + List / By hour", side: "inside" },
-    { x: 4, y: 84.5, w: 92, h: 6, label: "Hourly bars", side: "inside" },
-    { x: 4, y: 91.5, w: 92, h: 6.5, label: "Job card", side: "inside" },
+    { x: 4, y: 74.5, w: 92, h: 10, label: "Day + List / By hour", side: "left" },
+    { x: 4, y: 84.5, w: 92, h: 6, label: "Hourly bars", side: "above" },
+    { x: 4, y: 91.5, w: 92, h: 6.5, label: "Job card", side: "above" },
   ],
   /* legacy */
   "calendar/vs-list": [
-    { x: 4, y: 73.5, w: 92, h: 10, label: "Day detail", side: "inside" },
+    { x: 4, y: 73.5, w: 92, h: 10, label: "Day detail", side: "left" },
     { x: 4, y: 91.5, w: 92, h: 6.5, label: "Job card", side: "above" },
   ],
   /* ---------- Documents hub (All / Driver / Vehicle) ---------- */
@@ -239,20 +239,20 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     { x: 70, y: 28, w: 26, h: 5, label: "Status badge", side: "left" },
   ],
   "documents/card-actions": [
-    { x: 4, y: 26, w: 92, h: 14, label: "Document card", side: "inside" },
+    { x: 4, y: 26, w: 92, h: 14, label: "Document card", side: "left" },
     { x: 68, y: 34, w: 28, h: 5, label: "View / Download / Remove", side: "left" },
   ],
   "documents/where-upload": [
     { x: 4, y: 9.5, w: 92, h: 72, label: "Upload / Replace", side: "inside" },
-    { x: 5, y: 91.5, w: 90, h: 5, label: "Delete vehicle", side: "inside" },
+    { x: 5, y: 91.5, w: 90, h: 5, label: "Delete vehicle", side: "above" },
   ],
   /* legacy keys if linked elsewhere */
   "documents/what-belongs": [
-    { x: 4, y: 8, w: 92, h: 6, label: "Doc type tabs", side: "inside" },
-    { x: 4, y: 14.5, w: 92, h: 5, label: "Status filters", side: "inside" },
+    { x: 4, y: 8, w: 92, h: 6, label: "Doc type tabs", side: "left" },
+    { x: 4, y: 14.5, w: 92, h: 5, label: "Status filters", side: "left" },
   ],
   "documents/vehicle-docs": [
-    { x: 4, y: 8, w: 92, h: 6, label: "Vehicle Docs tab", side: "inside" },
+    { x: 4, y: 8, w: 92, h: 6, label: "Vehicle Docs tab", side: "left" },
     { x: 4, y: 22, w: 92, h: 55, label: "Vehicle document cards", side: "inside" },
   ],
   "documents/keep-current": [
@@ -261,10 +261,10 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   /* ---------- Performance (performance_screen.png) ---------- */
   "performance": [
     { x: 3, y: 13.8, w: 94, h: 4.2, label: "Period", side: "above" },
-    { x: 3, y: 19.2, w: 46, h: 12.5, label: "Earnings", side: "inside" },
-    { x: 51, y: 19.2, w: 46, h: 12.5, label: "Trips", side: "inside" },
-    { x: 3, y: 32.8, w: 46, h: 12.5, label: "Acceptance", side: "inside" },
-    { x: 51, y: 32.8, w: 46, h: 12.5, label: "Cancellation", side: "inside" },
+    { x: 3, y: 19.2, w: 46, h: 12.5, label: "Earnings", side: "right" },
+    { x: 51, y: 19.2, w: 46, h: 12.5, label: "Trips", side: "left" },
+    { x: 3, y: 32.8, w: 46, h: 12.5, label: "Acceptance", side: "right" },
+    { x: 51, y: 32.8, w: 46, h: 12.5, label: "Cancellation", side: "left" },
     { x: 6, y: 52.5, w: 88, h: 4.5, label: "Search", side: "above" },
     { x: 3, y: 58, w: 94, h: 39, label: "Drivers", side: "inside" },
   ],
@@ -277,10 +277,10 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     side: "below",
   },
   "performance/kpi-cards": [
-    { x: 3, y: 19.2, w: 46, h: 12.5, label: "Earnings", side: "inside" },
-    { x: 51, y: 19.2, w: 46, h: 12.5, label: "Trips", side: "inside" },
-    { x: 3, y: 32.8, w: 46, h: 12.5, label: "Acceptance", side: "inside" },
-    { x: 51, y: 32.8, w: 46, h: 12.5, label: "Cancellation", side: "inside" },
+    { x: 3, y: 19.2, w: 46, h: 12.5, label: "Earnings", side: "right" },
+    { x: 51, y: 19.2, w: 46, h: 12.5, label: "Trips", side: "left" },
+    { x: 3, y: 32.8, w: 46, h: 12.5, label: "Acceptance", side: "right" },
+    { x: 51, y: 32.8, w: 46, h: 12.5, label: "Cancellation", side: "left" },
   ],
   "performance/driver-list": [
     { x: 6, y: 52.5, w: 88, h: 4.5, label: "Search driver", side: "below" },
@@ -288,15 +288,15 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   ],
   /* legacy keys if linked elsewhere */
   "performance/vs-home": [
-    { x: 3, y: 19.2, w: 46, h: 12.5, label: "Earnings", side: "inside" },
-    { x: 51, y: 19.2, w: 46, h: 12.5, label: "Trips", side: "inside" },
-    { x: 3, y: 32.8, w: 46, h: 12.5, label: "Acceptance", side: "inside" },
-    { x: 51, y: 32.8, w: 46, h: 12.5, label: "Cancellation", side: "inside" },
+    { x: 3, y: 19.2, w: 46, h: 12.5, label: "Earnings", side: "right" },
+    { x: 51, y: 19.2, w: 46, h: 12.5, label: "Trips", side: "left" },
+    { x: 3, y: 32.8, w: 46, h: 12.5, label: "Acceptance", side: "right" },
+    { x: 51, y: 32.8, w: 46, h: 12.5, label: "Cancellation", side: "left" },
   ],
   /* ---------- Earnings (earning.png) ---------- */
   "earnings": [
     { x: 78, y: 6.8, w: 10, h: 4.2, label: "Download", side: "left" },
-    { x: 4, y: 11.5, w: 92, h: 19, label: "Period Filter", side: "inside" },
+    { x: 4, y: 11.5, w: 92, h: 19, label: "Period Filter", side: "left" },
     { x: 4, y: 31.5, w: 92, h: 24, label: "End Balance", side: "inside" },
     { x: 6, y: 58.5, w: 88, h: 6.5, label: "Search driver", side: "below" },
     { x: 4, y: 65.5, w: 92, h: 22, label: "Driver card", side: "inside" },
@@ -308,7 +308,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 19,
     label: "Period · Filter · Reset",
-    side: "inside",
+    side: "above",
   },
   "earnings/end-balance": {
     x: 4,
@@ -316,7 +316,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 24,
     label: "End Balance",
-    side: "inside",
+    side: "above",
   },
   "earnings/driver-earnings": [
     { x: 6, y: 58.5, w: 88, h: 6.5, label: "Search driver", side: "below" },
@@ -331,7 +331,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 24,
     label: "End Balance",
-    side: "inside",
+    side: "above",
   },
   "earnings/vs-booking-income": {
     x: 4,
@@ -339,20 +339,20 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 24,
     label: "End Balance",
-    side: "inside",
+    side: "above",
   },
   /* ---------- Reports (reports.png + reports_dialogue.png) ---------- */
   "reports": [
-    { x: 4, y: 16, w: 92, h: 8.5, label: "Driver activity", side: "inside" },
-    { x: 4, y: 25, w: 92, h: 8, label: "Driver earnings", side: "inside" },
-    { x: 4, y: 33.5, w: 92, h: 8, label: "Trip summary", side: "inside" },
-    { x: 4, y: 45, w: 92, h: 11, label: "FROM / TO", side: "inside" },
+    { x: 4, y: 16, w: 92, h: 8.5, label: "Driver activity", side: "left" },
+    { x: 4, y: 25, w: 92, h: 8, label: "Driver earnings", side: "left" },
+    { x: 4, y: 33.5, w: 92, h: 8, label: "Trip summary", side: "left" },
+    { x: 4, y: 45, w: 92, h: 11, label: "FROM / TO", side: "left" },
     { x: 4, y: 88.5, w: 92, h: 5.5, label: "Generate & Download", side: "above" },
   ],
   "reports/report-type": [
-    { x: 4, y: 16, w: 92, h: 8.5, label: "Driver activity", side: "inside" },
-    { x: 4, y: 25, w: 92, h: 8, label: "Driver earnings", side: "inside" },
-    { x: 4, y: 33.5, w: 92, h: 8, label: "Trip summary", side: "inside" },
+    { x: 4, y: 16, w: 92, h: 8.5, label: "Driver activity", side: "left" },
+    { x: 4, y: 25, w: 92, h: 8, label: "Driver earnings", side: "left" },
+    { x: 4, y: 33.5, w: 92, h: 8, label: "Trip summary", side: "left" },
   ],
   "reports/date-range": {
     x: 4,
@@ -360,7 +360,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 11,
     label: "FROM / TO",
-    side: "inside",
+    side: "above",
   },
   "reports/generate-download": [
     { x: 10, y: 34, w: 80, h: 28, label: "Confirm download", side: "inside" },
@@ -375,7 +375,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     w: 92,
     h: 11,
     label: "FROM / TO",
-    side: "inside",
+    side: "above",
   },
   "reports/handoff": [
     { x: 10, y: 34, w: 80, h: 28, label: "Confirm download", side: "inside" },
@@ -383,12 +383,12 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   ],
   /* ---------- Settings (settings2.png + theme_language_change.png) ---------- */
   "settings": [
-    { x: 4, y: 14, w: 92, h: 5.5, label: "Fleet Information", side: "inside" },
-    { x: 4, y: 20, w: 92, h: 5.5, label: "Profile", side: "inside" },
-    { x: 4, y: 26, w: 92, h: 5.5, label: "Change Password", side: "inside" },
-    { x: 4, y: 36, w: 92, h: 5.5, label: "Language & Appearance", side: "inside" },
-    { x: 4, y: 46, w: 92, h: 5.5, label: "Privacy", side: "inside" },
-    { x: 4, y: 52, w: 92, h: 5.5, label: "Recent Activity", side: "inside" },
+    { x: 4, y: 14, w: 92, h: 5.5, label: "Fleet Information", side: "left" },
+    { x: 4, y: 20, w: 92, h: 5.5, label: "Profile", side: "left" },
+    { x: 4, y: 26, w: 92, h: 5.5, label: "Change Password", side: "left" },
+    { x: 4, y: 36, w: 92, h: 5.5, label: "Language & Appearance", side: "left" },
+    { x: 4, y: 46, w: 92, h: 5.5, label: "Privacy", side: "left" },
+    { x: 4, y: 52, w: 92, h: 5.5, label: "Recent Activity", side: "left" },
     { x: 4, y: 60.5, w: 92, h: 4.8, label: "Sign Out", side: "above" },
     { x: 4, y: 66, w: 92, h: 5.2, label: "Delete Account", side: "above" },
   ],
@@ -410,8 +410,8 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     side: "below",
   },
   "settings/language-appearance": [
-    { x: 4, y: 11, w: 92, h: 7, label: "Theme", side: "inside" },
-    { x: 4, y: 19, w: 92, h: 7, label: "Language", side: "inside" },
+    { x: 4, y: 11, w: 92, h: 7, label: "Theme", side: "left" },
+    { x: 4, y: 19, w: 92, h: 7, label: "Language", side: "left" },
   ],
   "settings/privacy": { x: 4, y: 46, w: 92, h: 5.5, label: "Privacy", side: "below" },
   "settings/recent-activity": {
@@ -433,7 +433,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   },
   /* legacy */
   "settings/who-changes": [
-    { x: 4, y: 14, w: 92, h: 5.5, label: "Fleet Information", side: "inside" },
+    { x: 4, y: 14, w: 92, h: 5.5, label: "Fleet Information", side: "left" },
     { x: 4, y: 60.5, w: 92, h: 4.8, label: "Sign Out", side: "above" },
   ],
   "settings/after-change": {
@@ -474,7 +474,7 @@ export const HIGHLIGHTS_BY_IMAGE: Record<string, HighlightDef> = {
     w: 98,
     h: 8,
     label: "Bottom tabs",
-    side: "inside",
+    side: "above",
   },
   "drawer.png::menu/hamburger": {
     x: 0,
@@ -482,7 +482,7 @@ export const HIGHLIGHTS_BY_IMAGE: Record<string, HighlightDef> = {
     w: 78,
     h: 70,
     label: "Side menu",
-    side: "inside",
+    side: "above",
   },
   "documents-hub.png::documents/status-filters": [
     { x: 4, y: 19.5, w: 92, h: 5, label: "Pending / Approved / Rejected", side: "above" },
@@ -517,8 +517,8 @@ export const HIGHLIGHTS_BY_IMAGE: Record<string, HighlightDef> = {
     side: "below",
   },
   "theme_language_change.png::settings/language-appearance": [
-    { x: 4, y: 11, w: 92, h: 7, label: "Theme", side: "inside" },
-    { x: 4, y: 19, w: 92, h: 7, label: "Language", side: "inside" },
+    { x: 4, y: 11, w: 92, h: 7, label: "Theme", side: "left" },
+    { x: 4, y: 19, w: 92, h: 7, label: "Language", side: "left" },
   ],
 };
 

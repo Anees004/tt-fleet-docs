@@ -2,7 +2,6 @@
 import type { HighlightBox } from "../data/highlights";
 
 const HL = "#8B1A1A";
-const HL_SOFT = "rgba(139, 26, 26, 0.1)";
 
 interface Props {
   src?: string | null;
@@ -17,46 +16,52 @@ const multi = boxes.length > 1;
 type Side = "above" | "below" | "left" | "right" | "inside";
 
 function labelSide(h: HighlightBox): Side {
-  if (h.side) return h.side;
-  if (multi) return "inside";
+  const requested = h.side;
+  const large = h.h >= 20 && h.w >= 50;
+
+  if (requested === "inside" && large) return "inside";
+  if (requested && requested !== "inside") return requested;
+
   if (h.y + h.h > 88) return "above";
-  if (h.y < 12 && h.x >= 70 && h.w <= 16) return "left";
-  if (h.y < 12 && h.h >= 10) return h.x < 40 ? "right" : "left";
-  if (h.h <= 5 && h.y >= 55) return h.x >= 45 ? "left" : "right";
-  if (h.y < 9) return "below";
-  if (h.y < 14 && h.w > 50) return "below";
+  if (h.y < 10) return h.x + h.w > 60 ? "left" : "below";
+  if (h.x + h.w >= 72) return "left";
+  if (h.x <= 8) return "right";
+  if (h.h <= 6) return h.y < 45 ? "below" : "above";
+  if (large) return "inside";
   return "above";
 }
 
 function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): string {
   const height = h.h;
-  const shadow = multiMode ? "box-shadow:none;" : "box-shadow:0 1px 3px rgba(0,0,0,0.22);";
+  const shadow = multiMode
+    ? "box-shadow:none;"
+    : "box-shadow:0 1px 2px rgba(0,0,0,0.18);";
   const base =
     `position:absolute;z-index:5;background:${HL};color:#fff;` +
-    "font-size:10px;font-weight:700;line-height:1.2;letter-spacing:0.02em;" +
-    "padding:2px 6px;border-radius:4px;white-space:nowrap;" +
+    "font-size:9px;font-weight:700;line-height:1.15;letter-spacing:0.02em;" +
+    "padding:2px 5px;border-radius:3px;white-space:nowrap;" +
     shadow +
     "pointer-events:none;" +
-    "max-width:42%;overflow:hidden;text-overflow:ellipsis;";
+    "max-width:40%;overflow:hidden;text-overflow:ellipsis;";
 
   if (side === "inside") {
-    return base + `left:${h.x + 1.2}%;top:${h.y + 1}%;`;
+    return base + `left:${h.x + 1.5}%;top:${h.y + 1.2}%;`;
   }
   if (side === "above") {
-    return base + `left:${h.x}%;top:${h.y}%;transform:translateY(calc(-100% - 5px));`;
+    return base + `left:${h.x}%;top:calc(${h.y}% - 18px);`;
   }
   if (side === "below") {
-    return base + `left:${h.x}%;top:${h.y + height}%;transform:translateY(5px);`;
+    return base + `left:${h.x}%;top:calc(${h.y + height}% + 4px);`;
   }
   if (side === "left") {
     return (
       base +
-      `left:${h.x}%;top:${h.y + height / 2}%;transform:translate(-100%,-50%) translateX(-5px);`
+      `right:calc(${100 - h.x}% + 4px);left:auto;top:calc(${h.y}% + ${height / 2}% - 8px);`
     );
   }
   return (
     base +
-    `left:${h.x + h.w}%;top:${h.y + height / 2}%;transform:translateY(-50%) translateX(5px);`
+    `left:calc(${h.x + h.w}% + 4px);top:calc(${h.y}% + ${height / 2}% - 8px);`
   );
 }
 ---
@@ -65,7 +70,7 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
   <div class:list={["phone-screen", { "has-highlights": boxes.length > 0 }]}>
     {
       src ? (
-        <img src={src} alt={alt} loading="lazy" />
+        <img src={src} alt={alt} loading="lazy" decoding="async" />
       ) : (
         <div class="img-missing">
           <strong>No screenshot</strong>
@@ -97,18 +102,18 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
   </div>
 </figure>
 
-<style define:vars={{ hl: HL, hlSoft: HL_SOFT }}>
+<style>
   .hl-box {
     position: absolute;
     z-index: 1;
-    border: 2.5px solid var(--hl);
-    border-radius: 10px;
-    background: var(--hlSoft);
+    border: 2.5px solid #8b1a1a;
+    border-radius: 8px;
+    background: rgba(139, 26, 26, 0.07);
     box-shadow: none;
     pointer-events: none;
   }
   .hl-box.multi {
-    background: var(--hlSoft);
+    background: rgba(139, 26, 26, 0.06);
     box-shadow: none;
   }
 </style>
