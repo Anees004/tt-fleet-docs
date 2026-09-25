@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /**
- * Builds the site (if needed) and prints /print/ to public/titan-fleet-operator-help.pdf
+ * Builds the site and prints /print/ to public/titan-fleet-operator-help.pdf
+ * Flattens annotated screenshots to bitmaps so iOS PDF viewers don't glitch
+ * on CSS overlays / transforms.
  */
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdir, writeFile, access, copyFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { createReadStream, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -78,8 +80,6 @@ async function waitForAssets(page) {
     document.querySelectorAll("img[loading='lazy']").forEach((img) => {
       img.setAttribute("loading", "eager");
     });
-
-    // Force decode every screenshot before print
     const imgs = [...document.images];
     await Promise.all(
       imgs.map(
@@ -91,17 +91,75 @@ async function waitForAssets(page) {
             }
             img.addEventListener("load", () => resolve(), { once: true });
             img.addEventListener("error", () => resolve(), { once: true });
-            // Kick lazy loaders that never fired
             const src = img.currentSrc || img.src;
             if (src) img.src = src;
           }),
       ),
     );
-
     if (document.fonts?.ready) await document.fonts.ready;
+    await new Promise((r) => setTimeout(r, 300));
+  });
+}
 
-    // Brief settle for layout after images
-    await new Promise((r) => setTimeout(r, 400));
+/**
+ * Replace each .annotated-media (image + CSS highlight layers) with a single
+ * PNG. iOS PDFKit often glitches on absolute overlays / transforms / shadows.
+ */
+async function flattenAnnotatedShots(page) {
+  const count = await page.$$eval(".annotated-media", (els) => els.length);
+  console.log(`Flattening ${count} annotated screenshots…`);
+
+  for (let i = 0; i < count; i++) {
+    const handle = await page.$(".annotated-media");
+    if (!handle) break;
+
+    // Scroll into view so layout/paint is correct before capture
+    await handle.evaluate((el) => {
+      el.scrollIntoView({ block: "center", inline: "nearest" });
+    });
+
+    const b64 = await handle.screenshot({
+      encoding: "base64",
+      type: "png",
+      omitBackground: false,
+    });
+
+    await handle.evaluate((el, dataUrl) => {
+      const prev = el.querySelector("img");
+      const img = document.createElement("img");
+      img.src = dataUrl;
+      img.alt = prev?.alt || "";
+      img.decoding = "sync";
+      img.loading = "eager";
+      img.className = "pdf-flat-shot";
+      img.style.cssText =
+        "display:block;width:100%;height:auto;border-radius:10px;border:1px solid #c0cbb5;background:#fff;";
+      const wrap = document.createElement("div");
+      wrap.className = "annotated-media is-flat";
+      wrap.appendChild(img);
+      el.replaceWith(wrap);
+    }, `data:image/png;base64,${b64}`);
+
+    await handle.dispose();
+  }
+
+  await page.evaluate(async () => {
+    document.body.classList.add("pdf-flat");
+    await Promise.all(
+      [...document.images]
+        .filter((img) => img.classList.contains("pdf-flat-shot"))
+        .map(
+          (img) =>
+            new Promise((resolve) => {
+              if (img.complete && img.naturalWidth > 0) resolve();
+              else {
+                img.onload = () => resolve();
+                img.onerror = () => resolve();
+              }
+            }),
+        ),
+    );
+    window.scrollTo(0, 0);
   });
 }
 
@@ -118,8 +176,7 @@ async function main() {
 
   try {
     const page = await browser.newPage();
-    // Wide viewport so print CSS keeps desktop two-column layout
-    await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
+    await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 2 });
     await page.goto(url, { waitUntil: "networkidle0", timeout: 180000 });
     await page.emulateMediaType("print");
     await waitForAssets(page);
@@ -135,11 +192,13 @@ async function main() {
       console.log(`All ${await page.evaluate(() => document.images.length)} images ready`);
     }
 
+    await flattenAnnotatedShots(page);
+
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
       preferCSSPageSize: false,
-      margin: { top: "14mm", bottom: "18mm", left: "12mm", right: "12mm" },
+      margin: { top: "12mm", bottom: "16mm", left: "12mm", right: "12mm" },
       displayHeaderFooter: true,
       headerTemplate: "<div></div>",
       footerTemplate:

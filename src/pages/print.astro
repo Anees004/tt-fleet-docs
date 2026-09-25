@@ -236,9 +236,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
       }
 
       .point {
-        break-inside: avoid;
-        margin: 1.25rem 0;
-        padding: 1rem 0;
+        /* Allow points to split across pages — avoid left huge blank bottoms */
+        break-inside: auto;
+        margin: 1rem 0;
+        padding: 0.75rem 0;
         border-top: 1px solid var(--border);
       }
       .point-grid {
@@ -322,8 +323,29 @@ const generated = new Date().toLocaleDateString("en-GB", {
           max-width: none;
           padding: 0;
         }
+        /* One guide per page, but allow points to fill leftover space */
         .guide {
           break-before: page;
+          break-inside: auto;
+          padding-top: 0.5rem;
+          margin-top: 0;
+          border-top: 0;
+        }
+        .guide:first-of-type {
+          border-top: 0;
+          padding-top: 0.5rem;
+          margin-top: 0;
+        }
+        .guide-header {
+          break-after: avoid;
+        }
+        .guide-layout {
+          break-inside: auto;
+          grid-template-columns: 1fr 220px !important;
+          margin-bottom: 0.75rem;
+        }
+        .point-grid {
+          grid-template-columns: 1fr 180px !important;
         }
         .cover,
         .toc {
@@ -333,21 +355,34 @@ const generated = new Date().toLocaleDateString("en-GB", {
           text-decoration: none;
           color: inherit;
         }
-        /* Keep two-column layout in PDF even if viewport is narrow */
-        .guide-layout {
-          grid-template-columns: 1fr 240px !important;
-        }
-        .point-grid {
-          grid-template-columns: 1fr 200px !important;
-        }
         .hl-box,
         .hl-label,
         .steps li::before,
         .badge,
         .callout,
-        .annotated-media {
+        .annotated-media,
+        .annotated-shot img {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+        }
+        /* Flat screenshots for iOS PDF (no layered overlays / shadows) */
+        .annotated-media {
+          overflow: hidden !important;
+          box-shadow: none !important;
+          border-radius: 10px !important;
+          border: 1px solid #c0cbb5 !important;
+          background: #fff !important;
+        }
+        .annotated-media img {
+          border-radius: 0 !important;
+        }
+        .hl-label {
+          box-shadow: none !important;
+          transform: none !important;
+        }
+        body.pdf-flat .hl-box,
+        body.pdf-flat .hl-label {
+          display: none !important;
         }
       }
 
