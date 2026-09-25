@@ -56,8 +56,8 @@ const generated = new Date().toLocaleDateString("en-GB", {
         font-family: "Source Sans 3", system-ui, sans-serif;
         color: var(--ink);
         background: #fff;
-        line-height: 1.4;
-        font-size: 10pt;
+        line-height: 1.5;
+        font-size: 11pt;
       }
       h1,
       h2,
@@ -164,59 +164,73 @@ const generated = new Date().toLocaleDateString("en-GB", {
       }
 
       .guide {
-        /* Page break only between topic groups — packs related guides together */
         break-before: auto;
-        padding-top: 0.35rem;
-        margin-top: 1.1rem;
-        border-top: 2px solid var(--border);
+        page-break-before: auto;
+        margin: 0 0 1.35rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid var(--border);
       }
+      /* New section group → fresh page; guides inside a group may share a page */
       .guide.group-start {
         break-before: page;
+        page-break-before: always;
         border-top: 0;
-        margin-top: 0;
-        padding-top: 0.25rem;
+        padding-top: 0.35rem;
       }
       .guide-header {
-        margin-bottom: 0.65rem;
-        padding-bottom: 0.4rem;
-        border-bottom: 1.5px solid var(--olive);
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.45rem;
+        border-bottom: 2px solid var(--olive);
+        break-after: avoid;
+        page-break-after: avoid;
       }
       .badge {
         display: inline-block;
-        font-size: 0.6rem;
+        font-size: 0.65rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.06em;
-        padding: 0.15rem 0.4rem;
+        padding: 0.2rem 0.5rem;
         border-radius: 999px;
         background: var(--olive-soft);
         color: var(--olive);
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.35rem;
       }
       .guide-header h2 {
-        margin: 0 0 0.2rem;
-        font-size: 1.3rem;
+        margin: 0 0 0.25rem;
+        font-size: 1.35rem;
       }
       .guide-goal {
         margin: 0;
         color: var(--ink-2);
-        font-size: 0.92rem;
+        font-size: 0.95rem;
       }
       .guide-meta {
-        font-size: 0.72rem;
+        font-size: 0.78rem;
         color: var(--muted);
-        margin-top: 0.2rem;
+        margin-top: 0.25rem;
+      }
+      .group-banner {
+        margin: 0 0 0.65rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--olive);
       }
 
       .guide-layout {
         display: grid;
-        grid-template-columns: 1fr minmax(200px, 230px);
-        gap: 0.85rem;
+        grid-template-columns: 1fr minmax(200px, 220px);
+        gap: 0.75rem;
         align-items: start;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
       }
-      .guide-intro {
-        break-inside: auto;
+      /* Keep a block together — only stays on a page if the whole block fits */
+      .guide-intro,
+      .point-grid {
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
       .steps {
         margin: 0;
@@ -227,23 +241,23 @@ const generated = new Date().toLocaleDateString("en-GB", {
       .steps li {
         counter-increment: step;
         display: flex;
-        gap: 0.5rem;
-        margin-bottom: 0.35rem;
-        padding: 0.4rem 0.55rem;
+        gap: 0.6rem;
+        margin-bottom: 0.4rem;
+        padding: 0.45rem 0.6rem;
         border: 1px solid var(--border);
         border-radius: 8px;
         background: #fafaf7;
-        font-size: 0.88rem;
+        font-size: 0.92rem;
       }
       .steps li::before {
         content: counter(step);
         flex-shrink: 0;
-        width: 1.25rem;
-        height: 1.25rem;
+        width: 1.35rem;
+        height: 1.35rem;
         border-radius: 50%;
         background: var(--olive);
         color: #fff;
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         font-weight: 700;
         display: grid;
         place-items: center;
@@ -251,46 +265,37 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
       .point {
         break-inside: auto;
-        margin: 0.45rem 0;
-        padding: 0.45rem 0;
+        margin: 0.3rem 0;
+        padding: 0.35rem 0;
         border-top: 1px solid var(--border);
-      }
-      .point.text-only {
-        /* No screenshot — denser text block */
-        break-inside: avoid;
       }
       .point-grid {
         display: grid;
-        grid-template-columns: 1fr minmax(160px, 185px);
-        gap: 0.75rem;
+        grid-template-columns: 1fr minmax(150px, 170px);
+        gap: 0.6rem;
         align-items: start;
-        break-inside: avoid;
-        page-break-inside: avoid;
-      }
-      .point.text-only .point-grid {
-        grid-template-columns: 1fr;
       }
       .point h3 {
-        margin: 0 0 0.15rem;
-        font-size: 0.98rem;
+        margin: 0 0 0.2rem;
+        font-size: 1rem;
       }
       .point .tease {
-        margin: 0 0 0.3rem;
+        margin: 0 0 0.35rem;
         color: var(--muted);
-        font-size: 0.8rem;
+        font-size: 0.85rem;
       }
       .point .body {
         margin: 0;
         color: var(--ink-2);
-        font-size: 0.88rem;
+        font-size: 0.92rem;
       }
       .callout {
-        margin-top: 0.4rem;
-        padding: 0.45rem 0.55rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 0.65rem;
         border-left: 3px solid var(--tip);
         background: #e8f0f6;
-        font-size: 0.8rem;
-        border-radius: 0 6px 6px 0;
+        font-size: 0.85rem;
+        border-radius: 0 8px 8px 0;
       }
       .callout.warn {
         border-left-color: var(--warn);
@@ -348,9 +353,11 @@ const generated = new Date().toLocaleDateString("en-GB", {
         }
         .guide {
           break-before: auto;
+          page-break-before: auto;
         }
         .guide.group-start {
           break-before: page;
+          page-break-before: always;
         }
         .cover,
         .toc {
@@ -360,21 +367,18 @@ const generated = new Date().toLocaleDateString("en-GB", {
           text-decoration: none;
           color: inherit;
         }
-        /* Compact phones — more sections per page */
+        /* Compact columns so multiple guides/points share a page when they fit */
         .guide-layout {
-          grid-template-columns: 1fr minmax(200px, 230px) !important;
+          grid-template-columns: 1fr minmax(200px, 220px) !important;
         }
         .point-grid {
-          grid-template-columns: 1fr minmax(160px, 185px) !important;
-        }
-        .point.text-only .point-grid {
-          grid-template-columns: 1fr !important;
+          grid-template-columns: 1fr minmax(150px, 170px) !important;
         }
         .guide-layout .annotated-shot.hero {
-          max-width: 230px !important;
+          max-width: 220px !important;
         }
         .point-grid .annotated-shot.compact {
-          max-width: 185px !important;
+          max-width: 170px !important;
         }
         .annotated-media img {
           /* Sharper, more stable decode in mobile PDF viewers */
@@ -446,26 +450,29 @@ const generated = new Date().toLocaleDateString("en-GB", {
       </nav>
 
       {
-        guides.map((entry, gi) => {
+        guides.map((entry, idx) => {
           const d = entry.data;
           const heroHls = getHighlights(d.id, null, d.image);
-          const prevGroup = gi > 0 ? guides[gi - 1].data.group : null;
-          const groupStart = gi === 0 || d.group !== prevGroup;
+          const prev = idx > 0 ? guides[idx - 1].data : null;
+          const groupStart = !prev || prev.group !== d.group;
           return (
             <article
               class:list={["guide", { "group-start": groupStart }]}
               id={`guide-${d.id}`}
             >
+              {groupStart && (
+                <p class="group-banner">{groupLabel(d.group)}</p>
+              )}
               <header class="guide-header">
                 {d.badge && <span class="badge">{d.badge}</span>}
                 <h2>{d.title}</h2>
                 <p class="guide-goal">{d.goal}</p>
-                <p class="guide-meta">{groupLabel(d.group)} · {d.blurb}</p>
+                <p class="guide-meta">{d.blurb}</p>
               </header>
 
               <div class="guide-layout guide-intro">
                 <div>
-                  <h3 style="font-size:0.9rem;margin:0 0 0.4rem;font-family:inherit;">
+                  <h3 style="font-size:0.95rem;margin:0 0 0.5rem;font-family:inherit;">
                     Steps
                   </h3>
                   <ol class="steps">
@@ -487,30 +494,16 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
               {d.points.length > 0 && (
                 <section class="points">
-                  {d.points.map((p, pi) => {
+                  {d.points.map((p) => {
                     const shot = p.image || d.image;
-                    const prevShot =
-                      pi === 0
-                        ? d.image
-                        : d.points[pi - 1].image || d.image;
-                    // Skip repeating the same screenshot — opener already showed it
-                    const showShot = Boolean(shot) && shot !== prevShot;
                     const hls = getHighlights(d.id, p.id, shot);
                     return (
-                      <div
-                        class:list={["point", { "text-only": !showShot }]}
-                        id={`point-${d.id}-${p.id}`}
-                      >
+                      <div class="point" id={`point-${d.id}-${p.id}`}>
                         <div class="point-grid">
                           <div>
                             <h3>{p.title}</h3>
                             <p class="tease">{p.tease}</p>
                             <p class="body">{p.body}</p>
-                            {!showShot && shot === d.image && (
-                              <p class="tease" style="margin-top:0.3rem;">
-                                See highlighted regions on the guide screenshot above.
-                              </p>
-                            )}
                             {p.tip && (
                               <div class:list={["callout", { warn: p.warn }]}>
                                 <strong>{p.warn ? "Watch out" : "Tip"}</strong>
@@ -518,9 +511,9 @@ const generated = new Date().toLocaleDateString("en-GB", {
                               </div>
                             )}
                           </div>
-                          {showShot && (
+                          {shot && (
                             <AnnotatedShot
-                              src={shot!}
+                              src={shot}
                               alt={`${p.title} screenshot`}
                               highlights={hls}
                               compact
