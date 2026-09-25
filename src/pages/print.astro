@@ -177,10 +177,24 @@ const generated = new Date().toLocaleDateString("en-GB", {
         border-top: 0;
         padding-top: 0.35rem;
       }
+      /* CORE guides: own page start — heading stays with steps + hero shot */
+      .guide.guide-core {
+        break-before: page;
+        page-break-before: always;
+      }
+      .guide.guide-core.group-start {
+        break-before: page;
+        page-break-before: always;
+      }
       .guide-header {
         margin-bottom: 0.75rem;
         padding-bottom: 0.45rem;
         border-bottom: 2px solid var(--olive);
+      }
+      /* Title + steps + screenshot must stay on one page (never orphan CORE heading) */
+      .guide-open {
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
       .badge {
         display: inline-block;
@@ -224,21 +238,14 @@ const generated = new Date().toLocaleDateString("en-GB", {
         align-items: start;
         margin-bottom: 0.4rem;
       }
-      /*
-        Title + steps + hero shot stay as one unit.
-        Never leave CORE / guide heading alone on a page.
-      */
-      .guide-opener {
-        break-inside: avoid;
-        page-break-inside: avoid;
-        break-before: auto;
-      }
-      .guide.group-start .guide-opener {
-        /* opener rides with the group page break on the article */
-      }
+      /* Point rows stay intact when they fit; intro is inside .guide-open */
       .point-grid {
         break-inside: avoid;
         page-break-inside: avoid;
+      }
+      .guide-intro {
+        break-inside: auto;
+        page-break-inside: auto;
       }
       .steps {
         margin: 0;
@@ -363,12 +370,12 @@ const generated = new Date().toLocaleDateString("en-GB", {
           break-before: auto;
           page-break-before: auto;
         }
-        .guide.group-start {
+        .guide.group-start,
+        .guide.guide-core {
           break-before: page;
           page-break-before: always;
         }
-        .guide-opener,
-        .point-grid {
+        .guide-open {
           break-inside: avoid !important;
           page-break-inside: avoid !important;
         }
@@ -382,16 +389,20 @@ const generated = new Date().toLocaleDateString("en-GB", {
         }
         /* Compact columns so multiple guides/points share a page when they fit */
         .guide-layout {
-          grid-template-columns: 1fr minmax(200px, 220px) !important;
+          grid-template-columns: 1fr minmax(180px, 200px) !important;
         }
         .point-grid {
           grid-template-columns: 1fr minmax(150px, 170px) !important;
         }
         .guide-layout .annotated-shot.hero {
-          max-width: 220px !important;
+          max-width: 200px !important;
         }
         .point-grid .annotated-shot.compact {
           max-width: 170px !important;
+        }
+        /* CORE opener must fit title+steps+shot on one page */
+        .guide-core .guide-layout .annotated-shot.hero {
+          max-width: 190px !important;
         }
         .annotated-media img {
           /* Sharper, more stable decode in mobile PDF viewers */
@@ -468,15 +479,19 @@ const generated = new Date().toLocaleDateString("en-GB", {
           const heroHls = getHighlights(d.id, null, d.image);
           const prev = idx > 0 ? guides[idx - 1].data : null;
           const groupStart = !prev || prev.group !== d.group;
+          const isCore = (d.badge || "").toLowerCase() === "core";
           return (
             <article
-              class:list={["guide", { "group-start": groupStart }]}
+              class:list={[
+                "guide",
+                { "group-start": groupStart, "guide-core": isCore },
+              ]}
               id={`guide-${d.id}`}
             >
-              <div class="guide-opener">
-                {groupStart && (
-                  <p class="group-banner">{groupLabel(d.group)}</p>
-                )}
+              {groupStart && (
+                <p class="group-banner">{groupLabel(d.group)}</p>
+              )}
+              <div class="guide-open">
                 <header class="guide-header">
                   {d.badge && <span class="badge">{d.badge}</span>}
                   <h2>{d.title}</h2>
