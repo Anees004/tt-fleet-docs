@@ -181,8 +181,6 @@ const generated = new Date().toLocaleDateString("en-GB", {
         margin-bottom: 0.75rem;
         padding-bottom: 0.45rem;
         border-bottom: 2px solid var(--olive);
-        break-after: avoid;
-        page-break-after: avoid;
       }
       .badge {
         display: inline-block;
@@ -226,9 +224,12 @@ const generated = new Date().toLocaleDateString("en-GB", {
         align-items: start;
         margin-bottom: 0.4rem;
       }
-      /* Keep a block together — only stays on a page if the whole block fits */
-      .guide-intro,
-      .point-grid {
+      /*
+        Title + Steps + hero shot must stay together.
+        If they don't fit at the bottom of a page, the whole opener
+        moves to the next page (no stranded CORE headings).
+      */
+      .guide-opener {
         break-inside: avoid;
         page-break-inside: avoid;
       }
@@ -274,6 +275,8 @@ const generated = new Date().toLocaleDateString("en-GB", {
         grid-template-columns: 1fr minmax(150px, 170px);
         gap: 0.6rem;
         align-items: start;
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
       .point h3 {
         margin: 0 0 0.2rem;
@@ -358,6 +361,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
         .guide.group-start {
           break-before: page;
           page-break-before: always;
+        }
+        .guide-opener {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
         }
         .cover,
         .toc {
@@ -463,33 +470,35 @@ const generated = new Date().toLocaleDateString("en-GB", {
               {groupStart && (
                 <p class="group-banner">{groupLabel(d.group)}</p>
               )}
-              <header class="guide-header">
-                {d.badge && <span class="badge">{d.badge}</span>}
-                <h2>{d.title}</h2>
-                <p class="guide-goal">{d.goal}</p>
-                <p class="guide-meta">{d.blurb}</p>
-              </header>
+              <div class="guide-opener">
+                <header class="guide-header">
+                  {d.badge && <span class="badge">{d.badge}</span>}
+                  <h2>{d.title}</h2>
+                  <p class="guide-goal">{d.goal}</p>
+                  <p class="guide-meta">{d.blurb}</p>
+                </header>
 
-              <div class="guide-layout guide-intro">
-                <div>
-                  <h3 style="font-size:0.95rem;margin:0 0 0.5rem;font-family:inherit;">
-                    Steps
-                  </h3>
-                  <ol class="steps">
-                    {d.steps.map((s) => (
-                      <li>{s}</li>
-                    ))}
-                  </ol>
+                <div class="guide-layout guide-intro">
+                  <div>
+                    <h3 style="font-size:0.95rem;margin:0 0 0.5rem;font-family:inherit;">
+                      Steps
+                    </h3>
+                    <ol class="steps">
+                      {d.steps.map((s) => (
+                        <li>{s}</li>
+                      ))}
+                    </ol>
+                  </div>
+                  {d.image && (
+                    <AnnotatedShot
+                      src={d.image}
+                      alt={`${d.title} screenshot`}
+                      highlights={heroHls}
+                      eager
+                      hero
+                    />
+                  )}
                 </div>
-                {d.image && (
-                  <AnnotatedShot
-                    src={d.image}
-                    alt={`${d.title} screenshot`}
-                    highlights={heroHls}
-                    eager
-                    hero
-                  />
-                )}
               </div>
 
               {d.points.length > 0 && (
