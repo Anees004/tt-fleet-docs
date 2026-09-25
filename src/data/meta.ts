@@ -24,14 +24,14 @@ export const GROUPS = [
     id: "more",
     label: "More screens",
     icon: "menu",
-    desc: "Calendar through Settings",
-    first: "calendar",
+    desc: "Performance through Settings",
+    first: "performance",
   },
   {
     id: "reference",
     label: "Reference",
     icon: "rules",
-    desc: "Rules & Custom dates",
+    desc: "Operator do / don't checklist",
     first: "rules",
   },
 ] as const;
@@ -54,14 +54,13 @@ export const GUIDE_ORDER = [
   "accept-assign",
   "ride-hailing",
   "date-filter",
+  "performance",
   "calendar",
   "documents",
-  "performance",
   "earnings",
   "reports",
   "settings",
   "rules",
-  "home-custom",
 ] as const;
 
 export const WORKFLOWS = [
@@ -75,4 +74,20 @@ export const WORKFLOWS = [
 
 export function groupLabel(id: string): string {
   return GROUPS.find((g) => g.id === id)?.label ?? id;
+}
+
+/**
+ * Manual / help-site document version — bump when shipping content or screenshot
+ * changes so operators and PDF exports stay identifiable.
+ */
+export const DOC_VERSION = {
+  /** Semver for the operator help document set */
+  version: "1.1.0",
+  /** ISO date of this document release */
+  revised: "2026-09-25",
+  label: "Titan Fleet Operator Help",
+} as const;
+
+export function docVersionLine(): string {
+  return `${DOC_VERSION.label} · Doc v${DOC_VERSION.version} · Revised ${DOC_VERSION.revised}`;
 }

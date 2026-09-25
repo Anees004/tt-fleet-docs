@@ -33,12 +33,4 @@ points:
     related:
       - "driver-profile"
     image: "/images/home-online-drivers.png"
-  - id: "open-profile"
-    title: "Open driver profile"
-    tease: "Tap a row for full records"
-    body: "Tap a driver to see their records: quality score, earnings, completed and cancelled trips, rating, completion rate, documents, vehicle assignment, and Activate / Deactivate or Remove."
-    icon: "eye"
-    related:
-      - "driver-profile"
-    image: "/images/driver-detail.png"
 ---

@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import AnnotatedShot from "../components/AnnotatedShot.astro";
-import { GROUPS, GUIDE_ORDER, groupLabel } from "../data/meta";
-import { getHighlight } from "../data/highlights";
+import { GROUPS, GUIDE_ORDER, groupLabel, docVersionLine } from "../data/meta";
+import { getHighlights } from "../data/highlights";
 
 const guides = (await getCollection("guides"))
   .slice()
@@ -103,6 +103,17 @@ const generated = new Date().toLocaleDateString("en-GB", {
       .cover-meta {
         margin-top: 1.5rem;
         font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .print-doc-foot {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        break-inside: avoid;
+      }
+      .print-doc-foot p {
+        margin: 0;
+        font-size: 0.8rem;
         color: var(--muted);
       }
 
@@ -350,7 +361,9 @@ const generated = new Date().toLocaleDateString("en-GB", {
           setup. Orange highlights on screenshots mark the control or region
           each topic explains.
         </p>
-        <p class="cover-meta">Generated {generated} · Internal operator documentation</p>
+        <p class="cover-meta">
+          {docVersionLine()} · Generated {generated} · Internal operator documentation
+        </p>
         <div class="legend" style="margin-top: 1.25rem">
           <span class="legend-swatch" aria-hidden="true"></span>
           Highlighted region on device screenshot
@@ -381,7 +394,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
       {
         guides.map((entry) => {
           const d = entry.data;
-          const heroHl = getHighlight(d.id, null, d.image);
+          const heroHls = getHighlights(d.id, null, d.image);
           return (
             <article class="guide" id={`guide-${d.id}`}>
               <header class="guide-header">
@@ -406,7 +419,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                   <AnnotatedShot
                     src={d.image}
                     alt={`${d.title} screenshot`}
-                    highlight={heroHl}
+                    highlights={heroHls}
                   />
                 )}
               </div>
@@ -418,7 +431,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                   </h3>
                   {d.points.map((p) => {
                     const shot = p.image || d.image;
-                    const hl = getHighlight(d.id, p.id, shot);
+                    const hls = getHighlights(d.id, p.id, shot);
                     return (
                       <div class="point" id={`point-${d.id}-${p.id}`}>
                         <div class="point-grid">
@@ -437,7 +450,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                             <AnnotatedShot
                               src={shot}
                               alt={`${p.title} screenshot`}
-                              highlight={hl}
+                              highlights={hls}
                               compact
                             />
                           )}
@@ -451,6 +464,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
           );
         })
       }
+
+      <footer class="print-doc-foot">
+        <p>{docVersionLine()}</p>
+      </footer>
     </div>
   </body>
 </html>

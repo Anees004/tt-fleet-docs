@@ -1,5 +1,5 @@
 ---
-import { GROUPS } from "../data/meta";
+import { GROUPS, docVersionLine } from "../data/meta";
 import { iconSvg } from "../lib/icons";
 import ThemeToggle from "./ThemeToggle.astro";
 
@@ -87,7 +87,10 @@ const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" s
   </nav>
 
   <footer class="sidebar-foot">
-    <a class="text-link" id="nav-home" href="/">Overview</a>
+    <div class="sidebar-foot-left">
+      <a class="text-link" id="nav-home" href="/">Overview</a>
+      <p class="doc-version" title={docVersionLine()}>{docVersionLine()}</p>
+    </div>
     <div class="sidebar-foot-actions">
       <a class="text-link" href="/print/" target="_blank" rel="noopener">Print</a>
       <a class="text-link" href="/titan-fleet-operator-help.pdf" download>PDF</a>

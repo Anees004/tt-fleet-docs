@@ -6,7 +6,7 @@ blurb: "Reach Greeters, Live Map, Settings…"
 badge: "Core"
 badgeClass: ""
 goal: "Open the drawer for screens that are not on the bottom tabs."
-image: "/images/drawer.png"
+image: "/images/dh-sim-booted.png"
 icon: "menu"
 steps:
   - "Tap the hamburger (☰) at the top left of Home or other main tabs."
@@ -17,19 +17,14 @@ points:
   - id: "hamburger"
     title: "Hamburger opens the drawer"
     tease: "Top-left menu control"
-    body: "The three-line icon opens the side navigation. Bottom tabs cover Home, Drivers, Vehicles, and Bookings; everything else lives in this drawer."
+    body: "The three-line icon opens the side navigation. Bottom tabs cover Home, Drivers, Vehicles, and Bookings; everything else lives in this drawer. Typical items: Greeters, Documents, Performance, Calendar, Earnings, Reports, Live Map, Settings. Labels may vary slightly by app version, but the pattern is the same — secondary tools live here."
     icon: "menu"
     related:
       - "home-dashboard"
-  - id: "drawer-destinations"
-    title: "Drawer destinations"
-    tease: "Greeters through Settings"
-    body: "Typical items: Greeters, Documents, Performance, Calendar, Earnings, Reports, Live Map, Settings. Labels may vary slightly by app version, but the pattern is the same — secondary tools live here."
-    icon: "link"
-    related:
       - "greeters"
       - "settings"
       - "live-map"
+    image: "/images/drawer.png"
   - id: "vs-tabs"
     title: "Drawer vs bottom tabs"
     tease: "When to use which"
@@ -38,4 +33,5 @@ points:
     related:
       - "bookings-list"
       - "drivers"
+    image: "/images/dh-sim-booted.png"
 ---

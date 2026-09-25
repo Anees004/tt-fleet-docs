@@ -336,14 +336,28 @@ a {
   padding: 0.75rem 1rem 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 0.5rem;
+}
+.sidebar-foot-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+.sidebar-foot .doc-version {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.45);
+  word-break: break-word;
 }
 .sidebar-foot-actions {
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  flex-shrink: 0;
 }
 .sidebar-foot .theme-toggle {
   color: rgba(255, 255, 255, 0.75);
@@ -351,6 +365,18 @@ a {
 .sidebar-foot .theme-toggle:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
+}
+
+.site-doc-foot {
+  margin-top: 2.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+}
+.site-doc-foot p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted, #6b7280);
+  letter-spacing: 0.01em;
 }
 .text-link {
   background: none;

@@ -45,7 +45,8 @@ points:
   - id: "forgot-link"
     title: "Forgot password?"
     tease: "Start the reset flow"
-    body: "Tap Forgot password? under the password field to begin the reset steps. You will enter your fleet email and receive a code if the account is registered."
+    body: "Tap Forgot password? under the password field to begin the three-step reset: fleet email → email OTP → new password."
+
     icon: "bell"
     related:
       - "forgot-password"

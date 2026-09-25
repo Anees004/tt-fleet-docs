@@ -52,5 +52,5 @@ points:
     related:
       - "live-map"
       - "vehicles"
-    image: "/images/drivers-add.png"
+    image: "/images/drivers.png"
 ---

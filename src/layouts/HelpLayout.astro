@@ -2,7 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import Sidebar from "../components/Sidebar.astro";
 import { getCollection } from "astro:content";
-import { GUIDE_ORDER } from "../data/meta";
+import { GUIDE_ORDER, docVersionLine } from "../data/meta";
 import "../styles/global.css";
 
 interface Props {
@@ -104,6 +104,9 @@ const menuIcon = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" st
 
         <main class="main" id="main" tabindex="-1" transition:animate="fade">
           <slot />
+          <footer class="site-doc-foot">
+            <p>{docVersionLine()}</p>
+          </footer>
         </main>
       </div>
     </div>

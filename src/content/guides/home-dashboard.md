@@ -41,7 +41,7 @@ points:
     icon: "filter"
     tip: "If numbers look wrong, check whether you still have Last Week selected — or whether Custom is still on from an earlier session."
     related:
-      - "home-custom"
+      - "date-filter"
     image: "/images/dh-sim-booted.png"
   - id: "period-presets"
     title: "This Week / Today / Yesterday"
@@ -50,16 +50,16 @@ points:
     icon: "calendar"
     tip: "Use Today when you want hourly detail for the current day; use a week preset for the bigger trend."
     related:
-      - "home-custom"
+      - "date-filter"
     image: "/images/dh-sim-booted.png"
   - id: "period-custom"
     title: "Custom (one day or dates)"
     tease: "Pick a day or a date range"
-    body: "Custom is the sub-option when presets are not enough. Open Custom to select a single day / specific date, or a from–to range. Charts and KPI cards refresh to match what you confirm."
+    body: "Custom is the sub-option when presets are not enough. Open Custom to select a single day / specific date, or a from–to range. Charts and KPI cards refresh to match what you confirm. Bookings uses the same Custom idea on the funnel date filter."
     icon: "custom"
     tip: "Custom is for exact windows (one busy day, an event weekend, payroll week). Switch back to Last Week when you want the default again."
     related:
-      - "home-custom"
+      - "date-filter"
     image: "/images/dh-sim-booted.png"
   - id: "hourly-charts"
     title: "Earnings & trips charts"
@@ -68,7 +68,6 @@ points:
     icon: "chart"
     tip: "If charts look empty, switch to a period that had trips, or pull to refresh."
     related:
-      - "home-custom"
       - "online-drivers"
     image: "/images/dh-sim-booted.png"
   - id: "online-entry"
@@ -89,6 +88,18 @@ points:
     icon: "bell"
     related:
       - "accept-assign"
+      - "bookings-list"
+    image: "/images/dh-sim-booted.png"
+  - id: "bottom-menu"
+    title: "Bottom menu"
+    tease: "Home, Drivers, Vehicles, Bookings"
+    body: "The bottom tabs switch the main areas of the app: Home (this dashboard), Drivers, Vehicles, and Bookings. Home stays selected while you are on this screen."
+    icon: "menu"
+    tip: "Use the hamburger (top left) for more destinations such as Live Map, Calendar, and Settings."
+    related:
+      - "menu"
+      - "drivers"
+      - "vehicles"
       - "bookings-list"
     image: "/images/dh-sim-booted.png"
 ---

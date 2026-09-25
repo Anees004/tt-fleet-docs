@@ -11,7 +11,7 @@ icon: "vehicles"
 steps:
   - "Open the Vehicles bottom tab."
   - "Filter with All / Active / Inactive chips or search."
-  - "Tap a vehicle to review details."
+  - "Tap a vehicle card to open Edit Vehicle — set Active / Inactive, edit details, manage documents, or delete."
   - "Use + to register a new vehicle."
 points:
   - id: "status-chips"
@@ -21,13 +21,33 @@ points:
     icon: "filter"
     related:
       - "accept-assign"
+    image: "/images/vehicles.png"
   - id: "vehicle-cards"
     title: "Vehicle cards"
     tease: "Plate and type on each row"
-    body: "Cards show plate, category, and status. Open a card before assign if you need capacity or notes that are not on the list."
+    body: "Cards show plate, category, and status. Tap a card to open Edit Vehicle for full details."
     icon: "vehicles"
     related:
       - "drivers"
+    image: "/images/vehicles.png"
+  - id: "edit-status"
+    title: "Active / Inactive status"
+    tease: "Turn a car on or off for assign"
+    body: "On Edit Vehicle, the Status toggle sets Active or Inactive. Active cars can be assigned; Inactive stay in the list but should not be offered for trips. The Dispatchable badge shows whether the vehicle is ready for dispatch."
+    icon: "check"
+    tip: "Flip Status off when a car is in the shop so nobody assigns it by mistake."
+    related:
+      - "accept-assign"
+    image: "/images/edit_vehicle.png"
+  - id: "edit-docs-delete"
+    title: "Upload vehicle documents"
+    tease: "Attach files on Edit Vehicle"
+    body: "On Edit Vehicle, scroll to Vehicle Documents and Upload or Replace files (JPG, PNG, or PDF, up to 10 MB) for Insurance, Registration, Inspection, and Transport Licence. Those uploads then appear in side menu → Documents for View, Download, Remove, and status (Pending / Approved / Rejected). Delete vehicle at the bottom removes the car from the fleet — not a single document."
+    icon: "docs"
+    tip: "Use Documents hub to clear Pending and fix Rejected; use Edit Vehicle when you need to replace a file for that car."
+    related:
+      - "documents"
+    image: "/images/edit_vehicle_delete_documentadd.png"
   - id: "add-vehicle"
     title: "Add vehicle (+)"
     tease: "Register plates for the fleet"
@@ -35,4 +55,5 @@ points:
     icon: "spark"
     related:
       - "accept-assign"
+    image: "/images/vehicles.png"
 ---

@@ -1,14 +1,65 @@
 ---
+import type { HighlightBox } from "../data/highlights";
+
 interface Props {
   src?: string | null;
   alt?: string;
+  highlights?: HighlightBox[] | null;
 }
 
-const { src, alt = "" } = Astro.props;
+const { src, alt = "", highlights = null } = Astro.props;
+const boxes = highlights ?? [];
+const multi = boxes.length > 1;
+
+type Side = "above" | "below" | "left" | "right" | "inside";
+
+function labelSide(h: HighlightBox): Side {
+  if (h.side) return h.side;
+  if (multi) return "inside";
+  if (h.y + h.h > 88) return "above";
+  if (h.y < 12 && h.x >= 70 && h.w <= 16) return "left";
+  if (h.y < 12 && h.h >= 10) return h.x < 40 ? "right" : "left";
+  if (h.h <= 5 && h.y >= 55) return h.x >= 45 ? "left" : "right";
+  if (h.y < 9) return "below";
+  if (h.y < 14 && h.w > 50) return "below";
+  return "above";
+}
+
+function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): string {
+  const height = h.h;
+  const shadow = multiMode ? "box-shadow:none;" : "box-shadow:0 1px 3px rgba(0,0,0,0.22);";
+  const base =
+    "position:absolute;z-index:5;background:#c45c26;color:#fff;" +
+    "font-size:10px;font-weight:700;line-height:1.2;letter-spacing:0.02em;" +
+    "padding:2px 6px;border-radius:4px;white-space:nowrap;" +
+    shadow +
+    "pointer-events:none;" +
+    "max-width:42%;overflow:hidden;text-overflow:ellipsis;";
+
+  if (side === "inside") {
+    return base + `left:${h.x + 1.2}%;top:${h.y + 1}%;`;
+  }
+  if (side === "above") {
+    return base + `left:${h.x}%;top:${h.y}%;transform:translateY(calc(-100% - 5px));`;
+  }
+  if (side === "below") {
+    return base + `left:${h.x}%;top:${h.y + height}%;transform:translateY(5px);`;
+  }
+  if (side === "left") {
+    return (
+      base +
+      `left:${h.x}%;top:${h.y + height / 2}%;transform:translate(-100%,-50%) translateX(-5px);`
+    );
+  }
+  return (
+    base +
+    `left:${h.x + h.w}%;top:${h.y + height / 2}%;transform:translateY(-50%) translateX(5px);`
+  );
+}
 ---
 
 <figure class="phone-frame">
-  <div class="phone-screen">
+  <div class:list={["phone-screen", { "has-highlights": boxes.length > 0 }]}>
     {
       src ? (
         <img src={src} alt={alt} loading="lazy" />
@@ -19,5 +70,44 @@ const { src, alt = "" } = Astro.props;
         </div>
       )
     }
+    {
+      boxes.map((box) => {
+        const side = labelSide(box);
+        return (
+          <>
+            <div
+              class:list={["hl-box", { multi }]}
+              style={`left:${box.x}%;top:${box.y}%;width:${box.w}%;height:${box.h}%;`}
+              aria-hidden="true"
+            />
+            {
+              box.label ? (
+                <span class="hl-label" style={labelInlineStyle(box, side, multi)}>
+                  {box.label}
+                </span>
+              ) : null
+            }
+          </>
+        );
+      })
+    }
   </div>
 </figure>
+
+<style>
+  .hl-box {
+    position: absolute;
+    z-index: 1;
+    border: 2.5px solid #c45c26;
+    border-radius: 10px;
+    background: transparent;
+    box-shadow:
+      0 0 0 9999px rgba(20, 26, 16, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+  }
+  .hl-box.multi {
+    background: rgba(196, 92, 38, 0.06);
+    box-shadow: none;
+  }
+</style>

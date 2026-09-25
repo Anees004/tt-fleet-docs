@@ -10,8 +10,8 @@ image: "/images/greeters.png"
 icon: "greeter"
 steps:
   - "Open the side menu → Greeters."
-  - "Browse or search the greeter list."
-  - "Add or update greeter profiles as needed."
+  - "Browse or search the greeter list (All / Added by us / Set up by office)."
+  - "On a greeter you manage, use Edit to update details or Deactivate to take them off duty for assign."
   - "During Assign on a booking, pick a greeter when the trip requires one."
 points:
   - id: "when-needed"
@@ -21,6 +21,16 @@ points:
     icon: "greeter"
     related:
       - "accept-assign"
+    image: "/images/greeters.png"
+  - id: "edit-deactivate"
+    title: "Edit & deactivate"
+    tease: "Update or take a greeter offline"
+    body: "On greeters you manage (Added by us), each card shows Edit (pencil) and Deactivate (person with slash). Edit opens that greeter’s profile to change details. Deactivate stops them being offered on Assign while keeping their record. Office-set greeters may only show a call button instead."
+    icon: "check"
+    tip: "Deactivate when someone is unavailable so operators do not assign them by mistake."
+    related:
+      - "accept-assign"
+    image: "/images/greeters.png"
   - id: "assign-link"
     title: "Link on Assign"
     tease: "Pick greeter in Ride Details"
@@ -29,4 +39,5 @@ points:
     related:
       - "accept-assign"
       - "menu"
+    image: "/images/greeters.png"
 ---

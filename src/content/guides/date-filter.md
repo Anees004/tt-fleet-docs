@@ -2,7 +2,7 @@
 id: "date-filter"
 group: "bookings"
 title: "Date filter (funnel)"
-blurb: "Presets, Custom, clear with All"
+blurb: "Funnel presets to narrow the list"
 badge: "Core"
 badgeClass: ""
 goal: "Narrow Bookings (and similar lists) by date without losing your place."
@@ -10,9 +10,8 @@ image: "/images/date-filter.png"
 icon: "filter"
 steps:
   - "On Bookings, tap the funnel icon."
-  - "Pick a preset (Today, This week, …) or Custom range."
+  - "Pick a preset (Today, This week, …) or Custom if needed."
   - "Apply to refresh the list."
-  - "Choose All (or clear) when you want every date again."
 points:
   - id: "funnel-icon"
     title: "Funnel icon"
@@ -27,19 +26,5 @@ points:
     body: "Presets are one-tap ranges for common operator windows. Prefer a preset when it matches how you work the queue — faster than Custom."
     icon: "calendar"
     related:
-      - "home-custom"
-  - id: "custom-range"
-    title: "Custom range"
-    tease: "Pick from and to dates"
-    body: "Custom opens a from–to picker for exact windows (payroll week, event weekend, audit). Confirm both ends before applying."
-    icon: "custom"
-    related:
-      - "home-custom"
-  - id: "clear-all"
-    title: "Clear with All"
-    tease: "Reset the date filter"
-    body: "Select All (or the clear action on the sheet) to remove the date constraint and show the full list again. Useful after a focused Custom search."
-    icon: "check"
-    related:
-      - "bookings-list"
+      - "home-dashboard"
 ---
