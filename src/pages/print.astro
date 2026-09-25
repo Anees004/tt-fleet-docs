@@ -225,11 +225,18 @@ const generated = new Date().toLocaleDateString("en-GB", {
         margin-bottom: 0.4rem;
       }
       /*
-        Title + Steps + hero shot must stay together.
-        If they don't fit at the bottom of a page, the whole opener
-        moves to the next page (no stranded CORE headings).
+        Title + steps + hero shot stay as one unit.
+        Never leave CORE / guide heading alone on a page.
       */
       .guide-opener {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        break-before: auto;
+      }
+      .guide.group-start .guide-opener {
+        /* opener rides with the group page break on the article */
+      }
+      .point-grid {
         break-inside: avoid;
         page-break-inside: avoid;
       }
@@ -275,8 +282,6 @@ const generated = new Date().toLocaleDateString("en-GB", {
         grid-template-columns: 1fr minmax(150px, 170px);
         gap: 0.6rem;
         align-items: start;
-        break-inside: avoid;
-        page-break-inside: avoid;
       }
       .point h3 {
         margin: 0 0 0.2rem;
@@ -362,7 +367,8 @@ const generated = new Date().toLocaleDateString("en-GB", {
           break-before: page;
           page-break-before: always;
         }
-        .guide-opener {
+        .guide-opener,
+        .point-grid {
           break-inside: avoid !important;
           page-break-inside: avoid !important;
         }
@@ -467,10 +473,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
               class:list={["guide", { "group-start": groupStart }]}
               id={`guide-${d.id}`}
             >
-              {groupStart && (
-                <p class="group-banner">{groupLabel(d.group)}</p>
-              )}
               <div class="guide-opener">
+                {groupStart && (
+                  <p class="group-banner">{groupLabel(d.group)}</p>
+                )}
                 <header class="guide-header">
                   {d.badge && <span class="badge">{d.badge}</span>}
                   <h2>{d.title}</h2>
