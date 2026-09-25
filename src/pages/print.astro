@@ -44,7 +44,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
         --olive: #4a5d3a;
         --olive-soft: #e8efe3;
         --border: #dce3d5;
-        --accent: #c45c26;
+        --accent: #8b1a1a;
         --tip: #3a5a7a;
         --warn: #9b3b2e;
       }
@@ -200,10 +200,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
       .guide-layout {
         display: grid;
-        grid-template-columns: 1fr 240px;
-        gap: 1.5rem;
+        grid-template-columns: 1fr minmax(280px, 340px);
+        gap: 1.25rem;
         align-items: start;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
       }
       .steps {
         margin: 0;
@@ -236,21 +236,22 @@ const generated = new Date().toLocaleDateString("en-GB", {
       }
 
       .point {
-        /* Allow points to split across pages — avoid left huge blank bottoms */
+        /* Allow flow onto the same page as Steps — avoid half-blank guide openers */
         break-inside: auto;
-        margin: 1rem 0;
+        margin: 0.85rem 0;
         padding: 0.75rem 0;
         border-top: 1px solid var(--border);
       }
       .point-grid {
         display: grid;
-        grid-template-columns: 1fr 200px;
-        gap: 1.25rem;
+        grid-template-columns: 1fr minmax(240px, 290px);
+        gap: 1rem;
         align-items: start;
       }
       .point h3 {
         margin: 0 0 0.25rem;
         font-size: 1.1rem;
+        break-after: avoid;
       }
       .point .tease {
         margin: 0 0 0.5rem;
@@ -298,7 +299,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
         height: 1rem;
         border: 2.5px solid var(--accent);
         border-radius: 4px;
-        box-shadow: 0 0 0 3px rgba(196, 92, 38, 0.2);
+        box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.18);
       }
 
       .no-print {
@@ -323,29 +324,14 @@ const generated = new Date().toLocaleDateString("en-GB", {
           max-width: none;
           padding: 0;
         }
-        /* One guide per page, but allow points to fill leftover space */
         .guide {
           break-before: page;
-          break-inside: auto;
-          padding-top: 0.5rem;
-          margin-top: 0;
-          border-top: 0;
-        }
-        .guide:first-of-type {
-          border-top: 0;
-          padding-top: 0.5rem;
-          margin-top: 0;
         }
         .guide-header {
           break-after: avoid;
         }
         .guide-layout {
-          break-inside: auto;
-          grid-template-columns: 1fr 220px !important;
-          margin-bottom: 0.75rem;
-        }
-        .point-grid {
-          grid-template-columns: 1fr 180px !important;
+          grid-template-columns: 1fr minmax(300px, 360px) !important;
         }
         .cover,
         .toc {
@@ -355,34 +341,23 @@ const generated = new Date().toLocaleDateString("en-GB", {
           text-decoration: none;
           color: inherit;
         }
+        .point-grid {
+          grid-template-columns: 1fr minmax(250px, 300px) !important;
+        }
+        .annotated-shot.print-safe {
+          max-width: 360px !important;
+        }
+        .annotated-shot.print-safe.compact {
+          max-width: 300px !important;
+        }
         .hl-box,
         .hl-label,
         .steps li::before,
         .badge,
         .callout,
-        .annotated-media,
-        .annotated-shot img {
+        .annotated-media {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
-        }
-        /* Flat screenshots for iOS PDF (no layered overlays / shadows) */
-        .annotated-media {
-          overflow: hidden !important;
-          box-shadow: none !important;
-          border-radius: 10px !important;
-          border: 1px solid #c0cbb5 !important;
-          background: #fff !important;
-        }
-        .annotated-media img {
-          border-radius: 0 !important;
-        }
-        .hl-label {
-          box-shadow: none !important;
-          transform: none !important;
-        }
-        body.pdf-flat .hl-box,
-        body.pdf-flat .hl-label {
-          display: none !important;
         }
       }
 
@@ -405,7 +380,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
         <h1>Operator help center</h1>
         <p>
           Task-based guides for Sign in, Home, Live Map, bookings, and fleet
-          setup. Orange highlights on screenshots mark the control or region
+          setup. Dark red highlights on screenshots mark the control or region
           each topic explains.
         </p>
         <p class="cover-meta">
@@ -468,6 +443,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                     alt={`${d.title} screenshot`}
                     highlights={heroHls}
                     eager
+                    printSafe
                   />
                 )}
               </div>
@@ -498,6 +474,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                               highlights={hls}
                               compact
                               eager
+                              printSafe
                             />
                           )}
                         </div>

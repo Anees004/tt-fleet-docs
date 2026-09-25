@@ -1,6 +1,9 @@
 ---
 import type { HighlightBox } from "../data/highlights";
 
+const HL = "#8B1A1A";
+const HL_SOFT = "rgba(139, 26, 26, 0.1)";
+
 interface Props {
   src?: string | null;
   alt?: string;
@@ -29,7 +32,7 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
   const height = h.h;
   const shadow = multiMode ? "box-shadow:none;" : "box-shadow:0 1px 3px rgba(0,0,0,0.22);";
   const base =
-    "position:absolute;z-index:5;background:#c45c26;color:#fff;" +
+    `position:absolute;z-index:5;background:${HL};color:#fff;` +
     "font-size:10px;font-weight:700;line-height:1.2;letter-spacing:0.02em;" +
     "padding:2px 6px;border-radius:4px;white-space:nowrap;" +
     shadow +
@@ -94,18 +97,18 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
   </div>
 </figure>
 
-<style>
+<style define:vars={{ hl: HL, hlSoft: HL_SOFT }}>
   .hl-box {
     position: absolute;
     z-index: 1;
-    border: 2.5px solid #c45c26;
+    border: 2.5px solid var(--hl);
     border-radius: 10px;
-    background: rgba(196, 92, 38, 0.06);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    background: var(--hlSoft);
+    box-shadow: none;
     pointer-events: none;
   }
   .hl-box.multi {
-    background: rgba(196, 92, 38, 0.06);
+    background: var(--hlSoft);
     box-shadow: none;
   }
 </style>
