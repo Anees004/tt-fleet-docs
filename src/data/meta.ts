@@ -82,7 +82,7 @@ export function groupLabel(id: string): string {
  */
 export const DOC_VERSION = {
   /** Semver for the operator help document set */
-  version: "1.1.5",
+  version: "1.0.0",
   /** ISO date of this document release */
   revised: "2026-09-26",
   label: "Titan Fleet Operator Help",
