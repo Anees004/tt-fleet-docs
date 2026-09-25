@@ -196,6 +196,11 @@ const generated = new Date().toLocaleDateString("en-GB", {
         break-inside: avoid;
         page-break-inside: avoid;
       }
+      /* CORE opener page: only badge/title/steps/hero — no Step/point sections */
+      .guide-core .guide-open {
+        break-after: page;
+        page-break-after: always;
+      }
       .badge {
         display: inline-block;
         font-size: 0.65rem;
@@ -378,6 +383,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
         .guide-open {
           break-inside: avoid !important;
           page-break-inside: avoid !important;
+        }
+        .guide-core .guide-open {
+          break-after: page !important;
+          page-break-after: always !important;
         }
         .cover,
         .toc {
