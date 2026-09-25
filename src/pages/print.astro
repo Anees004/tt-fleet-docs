@@ -438,10 +438,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
               </div>
 
               {d.points.length > 0 && (
-                <section>
-                  <h3 style="font-size:1rem;margin:0 0 0.25rem;font-family:inherit;">
-                    Explore this screen
-                  </h3>
+                <section class="points">
                   {d.points.map((p) => {
                     const shot = p.image || d.image;
                     const hls = getHighlights(d.id, p.id, shot);
