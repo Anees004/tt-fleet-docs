@@ -24,3 +24,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local PDF regenerate copies
+titan-fleet-operator-help-2.pdf

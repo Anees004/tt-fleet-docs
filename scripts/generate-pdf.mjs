@@ -4,7 +4,7 @@
  */
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdir, writeFile, access } from "node:fs/promises";
+import { mkdir, writeFile, access, copyFile } from "node:fs/promises";
 import { createReadStream, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,6 +14,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const outPdf = path.join(root, "public", "titan-fleet-operator-help.pdf");
 const outDistPdf = path.join(dist, "titan-fleet-operator-help.pdf");
+const outRootCopy = path.join(root, "titan-fleet-operator-help-2.pdf");
 
 function run(cmd, args) {
   return new Promise((resolve, reject) => {
@@ -25,13 +26,8 @@ function run(cmd, args) {
 }
 
 async function ensureBuild() {
-  const printPage = path.join(dist, "print", "index.html");
-  try {
-    await access(printPage);
-  } catch {
-    console.log("Building site…");
-    await run("npm", ["run", "build"]);
-  }
+  console.log("Building site for PDF…");
+  await run("npm", ["run", "build"]);
 }
 
 function contentType(file) {
@@ -77,6 +73,38 @@ function startStaticServer(dir) {
   });
 }
 
+async function waitForAssets(page) {
+  await page.evaluate(async () => {
+    document.querySelectorAll("img[loading='lazy']").forEach((img) => {
+      img.setAttribute("loading", "eager");
+    });
+
+    // Force decode every screenshot before print
+    const imgs = [...document.images];
+    await Promise.all(
+      imgs.map(
+        (img) =>
+          new Promise((resolve) => {
+            if (img.complete && img.naturalWidth > 0) {
+              resolve();
+              return;
+            }
+            img.addEventListener("load", () => resolve(), { once: true });
+            img.addEventListener("error", () => resolve(), { once: true });
+            // Kick lazy loaders that never fired
+            const src = img.currentSrc || img.src;
+            if (src) img.src = src;
+          }),
+      ),
+    );
+
+    if (document.fonts?.ready) await document.fonts.ready;
+
+    // Brief settle for layout after images
+    await new Promise((r) => setTimeout(r, 400));
+  });
+}
+
 async function main() {
   await ensureBuild();
   const { server, port } = await startStaticServer(dist);
@@ -85,29 +113,46 @@ async function main() {
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--font-render-hinting=none"],
   });
 
   try {
     const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 120000 });
+    // Wide viewport so print CSS keeps desktop two-column layout
+    await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 180000 });
     await page.emulateMediaType("print");
+    await waitForAssets(page);
+
+    const missing = await page.evaluate(() =>
+      [...document.images]
+        .filter((img) => !img.complete || img.naturalWidth === 0)
+        .map((img) => img.src),
+    );
+    if (missing.length) {
+      console.warn(`Warning: ${missing.length} images still unloaded`, missing.slice(0, 5));
+    } else {
+      console.log(`All ${await page.evaluate(() => document.images.length)} images ready`);
+    }
 
     const pdf = await page.pdf({
       format: "A4",
       printBackground: true,
-      margin: { top: "14mm", bottom: "16mm", left: "12mm", right: "12mm" },
+      preferCSSPageSize: false,
+      margin: { top: "14mm", bottom: "18mm", left: "12mm", right: "12mm" },
       displayHeaderFooter: true,
       headerTemplate: "<div></div>",
       footerTemplate:
-        '<div style="font-size:8px;width:100%;padding:0 12mm;color:#6b7564;display:flex;justify-content:space-between;"><span>Titan Fleet · Operator help</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>',
+        '<div style="font-size:8px;width:100%;padding:0 12mm;color:#6b7564;display:flex;justify-content:space-between;font-family:system-ui,sans-serif;"><span>Titan Fleet · Operator help · Doc v1.1.0</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>',
     });
 
     await mkdir(path.dirname(outPdf), { recursive: true });
     await writeFile(outPdf, pdf);
     await writeFile(outDistPdf, pdf);
+    await writeFile(outRootCopy, pdf);
     console.log(`Wrote ${outPdf}`);
     console.log(`Wrote ${outDistPdf}`);
+    console.log(`Wrote ${outRootCopy}`);
   } finally {
     await browser.close();
     server.close();

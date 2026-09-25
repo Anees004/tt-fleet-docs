@@ -333,9 +333,21 @@ const generated = new Date().toLocaleDateString("en-GB", {
           text-decoration: none;
           color: inherit;
         }
-        .hl-box {
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+        /* Keep two-column layout in PDF even if viewport is narrow */
+        .guide-layout {
+          grid-template-columns: 1fr 240px !important;
+        }
+        .point-grid {
+          grid-template-columns: 1fr 200px !important;
+        }
+        .hl-box,
+        .hl-label,
+        .steps li::before,
+        .badge,
+        .callout,
+        .annotated-media {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
       }
 
@@ -420,6 +432,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                     src={d.image}
                     alt={`${d.title} screenshot`}
                     highlights={heroHls}
+                    eager
                   />
                 )}
               </div>
@@ -452,6 +465,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
                               alt={`${p.title} screenshot`}
                               highlights={hls}
                               compact
+                              eager
                             />
                           )}
                         </div>
