@@ -285,9 +285,13 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
       .point {
         break-inside: auto;
-        margin: 0.3rem 0;
-        padding: 0.35rem 0;
+        margin: 1.1rem 0 0.55rem;
+        padding: 0.85rem 0 0.45rem;
         border-top: 1px solid var(--border);
+      }
+      .point:first-child {
+        margin-top: 0.65rem;
+        padding-top: 0.65rem;
       }
       .point-grid {
         display: grid;
@@ -387,6 +391,15 @@ const generated = new Date().toLocaleDateString("en-GB", {
         .guide-core .guide-open {
           break-after: page !important;
           page-break-after: always !important;
+        }
+        /* More air between stacked point headings on the same page */
+        .point {
+          margin: 1.25rem 0 0.6rem !important;
+          padding: 1rem 0 0.5rem !important;
+        }
+        .point:first-child {
+          margin-top: 0.75rem !important;
+          padding-top: 0.75rem !important;
         }
         .cover,
         .toc {

@@ -143,7 +143,7 @@ async function main() {
       displayHeaderFooter: true,
       headerTemplate: "<div></div>",
       footerTemplate:
-        '<div style="font-size:8px;width:100%;padding:0 12mm;color:#6b7564;display:flex;justify-content:space-between;font-family:system-ui,sans-serif;"><span>Titan Fleet · Operator help · Doc v1.1.4</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>',
+        '<div style="font-size:8px;width:100%;padding:0 12mm;color:#6b7564;display:flex;justify-content:space-between;font-family:system-ui,sans-serif;"><span>Titan Fleet · Operator help · Doc v1.1.5</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>',
     });
 
     await mkdir(path.dirname(outPdf), { recursive: true });
