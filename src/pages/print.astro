@@ -433,13 +433,17 @@ const generated = new Date().toLocaleDateString("en-GB", {
           print-color-adjust: exact !important;
         }
         .hl-box,
-        .hl-label,
+        .hl-num,
+        .hl-legend-num,
         .steps li::before,
         .badge,
         .callout,
         .annotated-media {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+        }
+        .annotated-media {
+          box-shadow: none !important;
         }
       }
 

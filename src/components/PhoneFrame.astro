@@ -1,8 +1,6 @@
 ---
 import type { HighlightBox } from "../data/highlights";
 
-const HL = "#8B1A1A";
-
 interface Props {
   src?: string | null;
   alt?: string;
@@ -11,59 +9,10 @@ interface Props {
 
 const { src, alt = "", highlights = null } = Astro.props;
 const boxes = highlights ?? [];
+const labeled = boxes
+  .map((box, i) => ({ box, n: i + 1, label: (box.label || "").trim() }))
+  .filter((x) => x.label.length > 0);
 const multi = boxes.length > 1;
-
-type Side = "above" | "below" | "left" | "right" | "inside";
-
-function labelSide(h: HighlightBox): Side {
-  const requested = h.side;
-  const large = h.h >= 20 && h.w >= 50;
-
-  if (requested === "inside" && large) return "inside";
-  if (requested && requested !== "inside") return requested;
-
-  if (h.y + h.h > 88) return "above";
-  if (h.y < 10) return h.x + h.w > 60 ? "left" : "below";
-  if (h.x + h.w >= 72) return "left";
-  if (h.x <= 8) return "right";
-  if (h.h <= 6) return h.y < 45 ? "below" : "above";
-  if (large) return "inside";
-  return "above";
-}
-
-function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): string {
-  const height = h.h;
-  const shadow = multiMode
-    ? "box-shadow:none;"
-    : "box-shadow:0 1px 2px rgba(0,0,0,0.18);";
-  const base =
-    `position:absolute;z-index:5;background:${HL};color:#fff;` +
-    "font-size:9px;font-weight:700;line-height:1.15;letter-spacing:0.02em;" +
-    "padding:2px 5px;border-radius:3px;white-space:nowrap;" +
-    shadow +
-    "pointer-events:none;" +
-    "max-width:40%;overflow:hidden;text-overflow:ellipsis;";
-
-  if (side === "inside") {
-    return base + `left:${h.x + 1.5}%;top:${h.y + 1.2}%;`;
-  }
-  if (side === "above") {
-    return base + `left:${h.x}%;top:calc(${h.y}% - 18px);`;
-  }
-  if (side === "below") {
-    return base + `left:${h.x}%;top:calc(${h.y + height}% + 4px);`;
-  }
-  if (side === "left") {
-    return (
-      base +
-      `right:calc(${100 - h.x}% + 4px);left:auto;top:calc(${h.y}% + ${height / 2}% - 8px);`
-    );
-  }
-  return (
-    base +
-    `left:calc(${h.x + h.w}% + 4px);top:calc(${h.y}% + ${height / 2}% - 8px);`
-  );
-}
 ---
 
 <figure class="phone-frame">
@@ -79,27 +28,39 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
       )
     }
     {
-      boxes.map((box) => {
-        const side = labelSide(box);
+      boxes.map((box, i) => {
+        const n = i + 1;
+        const showNum = labeled.length > 0 && (box.label || "").trim().length > 0;
         return (
-          <>
-            <div
-              class:list={["hl-box", { multi }]}
-              style={`left:${box.x}%;top:${box.y}%;width:${box.w}%;height:${box.h}%;`}
-              aria-hidden="true"
-            />
-            {
-              box.label ? (
-                <span class="hl-label" style={labelInlineStyle(box, side, multi)}>
-                  {box.label}
-                </span>
-              ) : null
-            }
-          </>
+          <div
+            class:list={["hl-box", { multi }]}
+            style={`left:${box.x}%;top:${box.y}%;width:${box.w}%;height:${box.h}%;`}
+            aria-hidden="true"
+          >
+            {showNum && <span class="hl-num">{n}</span>}
+          </div>
         );
       })
     }
   </div>
+  {
+    labeled.length > 0 && (
+      <figcaption class="hl-legend">
+        <table>
+          <tbody>
+            {labeled.map(({ n, label }) => (
+              <tr>
+                <th scope="row">
+                  <span class="hl-legend-num">{n}</span>
+                </th>
+                <td>{label}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </figcaption>
+    )
+  }
 </figure>
 
 <style>
@@ -108,12 +69,66 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
     z-index: 1;
     border: 2.5px solid #8b1a1a;
     border-radius: 8px;
-    background: rgba(139, 26, 26, 0.07);
+    background: transparent;
     box-shadow: none;
     pointer-events: none;
   }
   .hl-box.multi {
-    background: rgba(139, 26, 26, 0.06);
+    background: transparent;
     box-shadow: none;
+  }
+  .hl-num {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 2;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    padding: 0 3px;
+    border-radius: 3px;
+    background: #8b1a1a;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1.05rem;
+    text-align: center;
+    box-shadow: none;
+  }
+  .hl-legend {
+    margin: 0.45rem 0 0;
+    width: 100%;
+    padding: 0 0.15rem;
+  }
+  .hl-legend table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 0.78rem;
+    line-height: 1.3;
+  }
+  .hl-legend th {
+    width: 1.5rem;
+    padding: 0.2rem 0.3rem 0.2rem 0;
+    vertical-align: top;
+    font-weight: 700;
+  }
+  .hl-legend td {
+    padding: 0.2rem 0;
+    color: var(--ink-2, #3d4a36);
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+  }
+  .hl-legend-num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    padding: 0 3px;
+    border-radius: 3px;
+    background: #8b1a1a;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    line-height: 1;
   }
 </style>
