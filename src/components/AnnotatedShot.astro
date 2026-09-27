@@ -33,11 +33,68 @@ const boxes: HighlightBox[] =
       ? [highlight]
       : [];
 
-const labeled = boxes
-  .map((box, i) => ({ box, n: i + 1, label: (box.label || "").trim() }))
-  .filter((x) => x.label.length > 0);
-
 const multi = boxes.length > 1;
+
+type Side = "above" | "below" | "left" | "right" | "inside";
+
+/**
+ * Prefer outside labels, but never place left/right outside the image —
+ * those spill into the adjacent text column. Use inside instead.
+ */
+function labelSide(h: HighlightBox): Side {
+  const requested = h.side;
+  const large = h.h >= 20 && h.w >= 50;
+
+  // Explicit left/right → pin inside the box so labels stay on the shot
+  if (requested === "left" || requested === "right") return "inside";
+  if (requested === "inside" && large) return "inside";
+  if (requested && requested !== "inside") return requested;
+
+  if (h.y + h.h > 88) return "above";
+  if (h.y < 10) return "below";
+  if (h.x + h.w >= 72) return "inside";
+  if (h.x <= 8) return "inside";
+  if (h.h <= 6) return h.y < 45 ? "below" : "above";
+  if (large) return "inside";
+  return "above";
+}
+
+/** Clamp left % so a nowrap label stays within the image. */
+function clampLeft(x: number): number {
+  return Math.max(1, Math.min(x, 58));
+}
+
+/** Avoid CSS transforms — they glitch in some iOS PDF viewers. */
+function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): string {
+  const { x, y, w, h: height } = h;
+  const shadow = multiMode
+    ? "box-shadow:none;"
+    : "box-shadow:none;";
+  const base =
+    `position:absolute;z-index:5;background:${HL};color:#fff;` +
+    "font-size:9px;font-weight:700;line-height:1.15;letter-spacing:0.02em;" +
+    "padding:2px 5px;border-radius:3px;white-space:nowrap;" +
+    shadow +
+    "pointer-events:none;" +
+    "max-width:min(42%, 7.5rem);overflow:hidden;text-overflow:ellipsis;";
+
+  if (side === "inside") {
+    return base + `left:${clampLeft(x + 1.5)}%;top:${y + 1.2}%;`;
+  }
+  if (side === "above") {
+    const top = Math.max(0.4, y - 3.2);
+    return base + `left:${clampLeft(x)}%;top:${top}%;`;
+  }
+  if (side === "below") {
+    const top = Math.min(96, y + height + 0.6);
+    return base + `left:${clampLeft(x)}%;top:${top}%;`;
+  }
+  // left/right fallbacks (should rarely hit) — keep inside image
+  if (side === "left") {
+    return base + `left:${clampLeft(Math.max(1, x - 2))}%;top:${y + 1.2}%;`;
+  }
+  return base + `left:${clampLeft(x + w > 55 ? x : x + w + 1)}%;top:${y + 1.2}%;`;
+}
 ---
 
 <figure class:list={["annotated-shot", { compact, hero }]}>
@@ -49,39 +106,27 @@ const multi = boxes.length > 1;
       decoding="sync"
     />
     {
-      boxes.map((box, i) => {
-        const n = i + 1;
-        const showNum = labeled.length > 0 && (box.label || "").trim().length > 0;
+      boxes.map((box) => {
+        const side = labelSide(box);
         return (
-          <div
-            class:list={["hl-box", { multi }]}
-            style={`left:${box.x}%;top:${box.y}%;width:${box.w}%;height:${box.h}%;`}
-            aria-hidden="true"
-          >
-            {showNum && <span class="hl-num">{n}</span>}
-          </div>
+          <>
+            <div
+              class:list={["hl-box", { multi }]}
+              style={`left:${box.x}%;top:${box.y}%;width:${box.w}%;height:${box.h}%;`}
+              aria-hidden="true"
+            />
+            {
+              box.label ? (
+                <span class="hl-label" style={labelInlineStyle(box, side, multi)}>
+                  {box.label}
+                </span>
+              ) : null
+            }
+          </>
         );
       })
     }
   </div>
-  {
-    labeled.length > 0 && (
-      <figcaption class="hl-legend">
-        <table>
-          <tbody>
-            {labeled.map(({ n, label }) => (
-              <tr>
-                <th scope="row">
-                  <span class="hl-legend-num">{n}</span>
-                </th>
-                <td>{label}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </figcaption>
-    )
-  }
 </figure>
 
 <style>
@@ -98,9 +143,9 @@ const multi = boxes.length > 1;
   .annotated-media {
     position: relative;
     border-radius: 14px;
+    /* Clip labels so they never spill into adjacent page text */
     overflow: hidden;
     border: 1px solid #c0cbb5;
-    /* No drop-shadow — iOS PDF/Safari paints it as a gray slab behind the shot */
     box-shadow: none;
     background: #fff;
   }
@@ -122,58 +167,5 @@ const multi = boxes.length > 1;
   .hl-box.multi {
     background: transparent;
     box-shadow: none;
-  }
-  .hl-num {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    z-index: 2;
-    min-width: 1.05rem;
-    height: 1.05rem;
-    padding: 0 3px;
-    border-radius: 3px;
-    background: #8b1a1a;
-    color: #fff;
-    font-size: 8px;
-    font-weight: 700;
-    line-height: 1.05rem;
-    text-align: center;
-    box-shadow: none;
-  }
-  .hl-legend {
-    margin: 0.4rem 0 0;
-    width: 100%;
-  }
-  .hl-legend table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-size: 0.72rem;
-    line-height: 1.25;
-  }
-  .hl-legend th {
-    width: 1.4rem;
-    padding: 0.15rem 0.25rem 0.15rem 0;
-    vertical-align: top;
-    font-weight: 700;
-  }
-  .hl-legend td {
-    padding: 0.15rem 0;
-    color: #3d4a36;
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-  }
-  .hl-legend-num {
-    display: inline-grid;
-    place-items: center;
-    min-width: 1.05rem;
-    height: 1.05rem;
-    padding: 0 3px;
-    border-radius: 3px;
-    background: #8b1a1a;
-    color: #fff;
-    font-size: 8px;
-    font-weight: 700;
-    line-height: 1;
   }
 </style>
