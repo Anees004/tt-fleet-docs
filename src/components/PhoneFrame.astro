@@ -18,16 +18,25 @@ type Side = "above" | "below" | "left" | "right" | "inside";
 function labelSide(h: HighlightBox): Side {
   const requested = h.side;
   const large = h.h >= 20 && h.w >= 50;
+  const thin = h.h <= 12;
 
-  if (requested === "left" || requested === "right") return "inside";
+  if (thin) {
+    if (requested === "below") return "below";
+    if (h.y < 10) return "below";
+    return "above";
+  }
+
+  if (requested === "left" || requested === "right") {
+    return h.y >= 8 ? "above" : "below";
+  }
   if (requested === "inside" && large) return "inside";
   if (requested && requested !== "inside") return requested;
 
   if (h.y + h.h > 88) return "above";
   if (h.y < 10) return "below";
-  if (h.x + h.w >= 72) return "inside";
-  if (h.x <= 8) return "inside";
-  if (h.h <= 6) return h.y < 45 ? "below" : "above";
+  if (h.w <= 22 && (h.x + h.w >= 72 || h.x <= 8)) {
+    return h.y >= 8 ? "above" : "below";
+  }
   if (large) return "inside";
   return "above";
 }
@@ -36,7 +45,7 @@ function clampLeft(x: number): number {
   return Math.max(1, Math.min(x, 58));
 }
 
-function labelInlineStyle(h: HighlightBox, side: Side, _multiMode: boolean): string {
+function labelInlineStyle(h: HighlightBox, side: Side): string {
   const { x, y, w, h: height } = h;
   const base =
     `position:absolute;z-index:5;background:${HL};color:#fff;` +
@@ -49,17 +58,17 @@ function labelInlineStyle(h: HighlightBox, side: Side, _multiMode: boolean): str
     return base + `left:${clampLeft(x + 1.5)}%;top:${y + 1.2}%;`;
   }
   if (side === "above") {
-    const top = Math.max(0.4, y - 3.2);
+    const top = Math.max(0.3, y - 4.2);
     return base + `left:${clampLeft(x)}%;top:${top}%;`;
   }
   if (side === "below") {
-    const top = Math.min(96, y + height + 0.6);
+    const top = Math.min(96.5, y + height + 0.8);
     return base + `left:${clampLeft(x)}%;top:${top}%;`;
   }
   if (side === "left") {
-    return base + `left:${clampLeft(Math.max(1, x - 2))}%;top:${y + 1.2}%;`;
+    return base + `left:${clampLeft(Math.max(1, x - 2))}%;top:${Math.max(0.3, y - 4.2)}%;`;
   }
-  return base + `left:${clampLeft(x + w > 55 ? x : x + w + 1)}%;top:${y + 1.2}%;`;
+  return base + `left:${clampLeft(x + w > 55 ? x : x + w + 1)}%;top:${Math.max(0.3, y - 4.2)}%;`;
 }
 ---
 
@@ -87,7 +96,7 @@ function labelInlineStyle(h: HighlightBox, side: Side, _multiMode: boolean): str
             />
             {
               box.label ? (
-                <span class="hl-label" style={labelInlineStyle(box, side, multi)}>
+                <span class="hl-label" style={labelInlineStyle(box, side)}>
                   {box.label}
                 </span>
               ) : null

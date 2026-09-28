@@ -38,23 +38,34 @@ const multi = boxes.length > 1;
 type Side = "above" | "below" | "left" | "right" | "inside";
 
 /**
- * Prefer outside labels, but never place left/right outside the image —
- * those spill into the adjacent text column. Use inside instead.
+ * Prefer labels outside the highlight so they don’t cover UI.
+ * Keep them on the screenshot (above/below) — never spill left/right into page text.
  */
 function labelSide(h: HighlightBox): Side {
   const requested = h.side;
   const large = h.h >= 20 && h.w >= 50;
+  const thin = h.h <= 12;
 
-  // Explicit left/right → pin inside the box so labels stay on the shot
-  if (requested === "left" || requested === "right") return "inside";
+  // Thin rows (chips, tabs, toolbars): always sit above/below the box
+  if (thin) {
+    if (requested === "below") return "below";
+    if (h.y < 10) return "below";
+    return "above";
+  }
+
+  // left/right requests → above/below so labels stay on-shot, not in text column
+  if (requested === "left" || requested === "right") {
+    return h.y >= 8 ? "above" : "below";
+  }
   if (requested === "inside" && large) return "inside";
   if (requested && requested !== "inside") return requested;
 
   if (h.y + h.h > 88) return "above";
   if (h.y < 10) return "below";
-  if (h.x + h.w >= 72) return "inside";
-  if (h.x <= 8) return "inside";
-  if (h.h <= 6) return h.y < 45 ? "below" : "above";
+  // Small edge controls: label above/below, not beside (beside spills off-shot)
+  if (h.w <= 22 && (h.x + h.w >= 72 || h.x <= 8)) {
+    return h.y >= 8 ? "above" : "below";
+  }
   if (large) return "inside";
   return "above";
 }
@@ -65,35 +76,31 @@ function clampLeft(x: number): number {
 }
 
 /** Avoid CSS transforms — they glitch in some iOS PDF viewers. */
-function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): string {
+function labelInlineStyle(h: HighlightBox, side: Side): string {
   const { x, y, w, h: height } = h;
-  const shadow = multiMode
-    ? "box-shadow:none;"
-    : "box-shadow:none;";
   const base =
     `position:absolute;z-index:5;background:${HL};color:#fff;` +
     "font-size:9px;font-weight:700;line-height:1.15;letter-spacing:0.02em;" +
     "padding:2px 5px;border-radius:3px;white-space:nowrap;" +
-    shadow +
-    "pointer-events:none;" +
+    "box-shadow:none;pointer-events:none;" +
     "max-width:min(42%, 7.5rem);overflow:hidden;text-overflow:ellipsis;";
 
   if (side === "inside") {
     return base + `left:${clampLeft(x + 1.5)}%;top:${y + 1.2}%;`;
   }
   if (side === "above") {
-    const top = Math.max(0.4, y - 3.2);
+    // Clearly above the box (~4.2% ≈ label height on phone shots)
+    const top = Math.max(0.3, y - 4.2);
     return base + `left:${clampLeft(x)}%;top:${top}%;`;
   }
   if (side === "below") {
-    const top = Math.min(96, y + height + 0.6);
+    const top = Math.min(96.5, y + height + 0.8);
     return base + `left:${clampLeft(x)}%;top:${top}%;`;
   }
-  // left/right fallbacks (should rarely hit) — keep inside image
   if (side === "left") {
-    return base + `left:${clampLeft(Math.max(1, x - 2))}%;top:${y + 1.2}%;`;
+    return base + `left:${clampLeft(Math.max(1, x - 2))}%;top:${Math.max(0.3, y - 4.2)}%;`;
   }
-  return base + `left:${clampLeft(x + w > 55 ? x : x + w + 1)}%;top:${y + 1.2}%;`;
+  return base + `left:${clampLeft(x + w > 55 ? x : x + w + 1)}%;top:${Math.max(0.3, y - 4.2)}%;`;
 }
 ---
 
@@ -117,7 +124,7 @@ function labelInlineStyle(h: HighlightBox, side: Side, multiMode: boolean): stri
             />
             {
               box.label ? (
-                <span class="hl-label" style={labelInlineStyle(box, side, multi)}>
+                <span class="hl-label" style={labelInlineStyle(box, side)}>
                   {box.label}
                 </span>
               ) : null

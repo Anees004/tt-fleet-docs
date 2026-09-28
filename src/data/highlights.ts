@@ -115,7 +115,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
 
   /* ---------- Vehicles ---------- */
   "vehicles": { x: 4, y: 14, w: 92, h: 55, label: "Vehicles" },
-  "vehicles/status-chips": { x: 4, y: 18, w: 92, h: 8, label: "Status chips" },
+  "vehicles/status-chips": { x: 4, y: 18, w: 92, h: 8, label: "Status chips", side: "above" },
   "vehicles/vehicle-cards": { x: 4, y: 18, w: 92, h: 45, label: "Vehicle cards" },
   /* edit_vehicle.png — name/Dispatchable + Active toggle */
   "vehicles/edit-status": [
@@ -142,7 +142,7 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
 
   /* ---------- Bookings ---------- */
   "bookings-list": { x: 4, y: 14, w: 92, h: 55, label: "Bookings list" },
-  "bookings-list/status-chips": { x: 4, y: 18, w: 92, h: 8, label: "Status chips" },
+  "bookings-list/status-chips": { x: 4, y: 18, w: 92, h: 8, label: "Status chips", side: "above" },
   "bookings-list/booking-cards": { x: 4, y: 18, w: 92, h: 45, label: "Booking cards" },
   "bookings-list/export": { x: 84, y: 18, w: 16, h: 6, label: "Export" ,side: "left" },
 
