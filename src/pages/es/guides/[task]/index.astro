@@ -1,0 +1,15 @@
+---
+import GuideTaskPage from "../../../../components/GuideTaskPage.astro";
+import { getGuides } from "../../../../i18n/guides";
+
+export async function getStaticPaths() {
+  const guides = await getGuides("es");
+  return guides.map((g) => ({
+    params: { task: g.data.id },
+  }));
+}
+
+const { task } = Astro.params;
+---
+
+<GuideTaskPage locale="es" task={task!} />

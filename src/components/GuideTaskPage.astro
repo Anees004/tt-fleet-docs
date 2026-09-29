@@ -1,0 +1,63 @@
+---
+import HelpLayout from "../layouts/HelpLayout.astro";
+import PhoneFrame from "./PhoneFrame.astro";
+import StepList from "./StepList.astro";
+import PointsGrid from "./PointsGrid.astro";
+import { getHighlights } from "../data/highlights";
+import { getGuide } from "../i18n/guides";
+import { localePath, type Locale } from "../i18n/config";
+import { groupLabelLocalized, t } from "../i18n/ui";
+
+interface Props {
+  locale: Locale;
+  task: string;
+}
+
+const { locale, task } = Astro.props;
+const entry = await getGuide(locale, task);
+if (!entry) {
+  return Astro.redirect(localePath(locale, "/"));
+}
+
+const d = entry.data;
+const ui = t(locale);
+const badgeClass = ["badge", d.badgeClass].filter(Boolean).join(" ");
+const heroHighlights = getHighlights(d.id, null, d.image);
+const path = `/guides/${d.id}/`;
+---
+
+<HelpLayout
+  title={d.title}
+  activeId={d.id}
+  description={d.goal}
+  locale={locale}
+  path={path}
+>
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href={localePath(locale, "/")}>{ui.breadcrumbOverview}</a>
+    <span class="sep">/</span>
+    <span>{groupLabelLocalized(locale, d.group)}</span>
+    <span class="sep">/</span>
+    <span>{d.title}</span>
+  </nav>
+
+  <header class="task-header">
+    <div>
+      {d.badge && <span class={badgeClass}>{d.badge}</span>}
+      <h1>{d.title}</h1>
+      <p class="task-goal">{d.goal}</p>
+    </div>
+  </header>
+
+  <div class="task-layout">
+    <div class="task-copy">
+      <StepList steps={d.steps} />
+      <PointsGrid taskId={d.id} points={d.points} locale={locale} />
+    </div>
+    <PhoneFrame
+      src={d.image}
+      alt={`${d.title} screenshot`}
+      highlights={heroHighlights}
+    />
+  </div>
+</HelpLayout>

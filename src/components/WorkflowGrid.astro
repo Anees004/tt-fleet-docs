@@ -1,6 +1,8 @@
 ---
 import { WORKFLOWS } from "../data/meta";
 import { iconSvg } from "../lib/icons";
+import { type Locale, localePath } from "../i18n/config";
+import { t } from "../i18n/ui";
 
 interface GuideLite {
   id: string;
@@ -10,25 +12,28 @@ interface GuideLite {
 
 interface Props {
   byId: Record<string, GuideLite>;
+  locale?: Locale;
 }
 
-const { byId } = Astro.props;
+const { byId, locale = "en" } = Astro.props;
+const ui = t(locale);
 const chevron = iconSvg("chevron", 14);
 ---
 
-<p class="section-label">Most-used workflows</p>
+<p class="section-label">{locale === "es" ? "Flujos más usados" : "Most-used workflows"}</p>
 <div class="workflow-grid">
   {
     WORKFLOWS.map((w) => {
-      const t = byId[w.id];
-      if (!t) return null;
+      const guide = byId[w.id];
+      if (!guide) return null;
+      const badge = ui.workflows[w.id] ?? w.label;
       return (
-        <a class="workflow-card" href={`/guides/${t.id}/`}>
-          <span class="wf-badge">{w.label}</span>
-          <h3>{t.title}</h3>
-          <p>{t.goal}</p>
+        <a class="workflow-card" href={localePath(locale, `/guides/${guide.id}/`)}>
+          <span class="wf-badge">{badge}</span>
+          <h3>{guide.title}</h3>
+          <p>{guide.goal}</p>
           <span class="wf-go">
-            Open guide{" "}
+            {locale === "es" ? "Abrir guía" : "Open guide"}{" "}
             <span set:html={chevron} />
           </span>
         </a>

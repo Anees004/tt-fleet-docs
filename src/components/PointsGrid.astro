@@ -1,5 +1,6 @@
 ---
 import { iconSvg } from "../lib/icons";
+import { type Locale, localePath } from "../i18n/config";
 
 interface Point {
   id: string;
@@ -11,23 +12,28 @@ interface Point {
 interface Props {
   taskId: string;
   points: Point[];
+  locale?: Locale;
 }
 
-const { taskId, points } = Astro.props;
+const { taskId, points, locale = "en" } = Astro.props;
 const chevron = iconSvg("chevron", 16);
 ---
 
 {
   points.length > 0 && (
     <div class="points-block">
-      <h2>Key points</h2>
+      <h2>{locale === "es" ? "Puntos clave" : "Key points"}</h2>
       <p class="points-intro">
-        Tap a point for a plain explanation — what it does, and what it is not
-        for.
+        {locale === "es"
+          ? "Toca un punto para una explicación sencilla: qué hace y para qué no sirve."
+          : "Tap a point for a plain explanation — what it does, and what it is not for."}
       </p>
       <div class="points-grid">
         {points.map((p) => (
-          <a class="point-card" href={`/guides/${taskId}/${p.id}/`}>
+          <a
+            class="point-card"
+            href={localePath(locale, `/guides/${taskId}/${p.id}/`)}
+          >
             <span class="point-icon" set:html={iconSvg(p.icon || "spark", 16)} />
             <span class="point-text">
               <strong>{p.title}</strong>

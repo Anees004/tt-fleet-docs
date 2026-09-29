@@ -1,0 +1,43 @@
+---
+id: "greeters"
+group: "setup"
+title: "Receptores"
+blurb: "Personal de aeropuerto / bienvenida"
+badge: "Configuración"
+badgeClass: "setup"
+goal: "Gestionar receptores que puedes asociar cuando una reserva necesita meet-and-greet."
+image: "/images/greeters.png"
+icon: "greeter"
+steps:
+  - "Abre el menú lateral → Receptores."
+  - "Explora o busca la lista de receptores (Todos / Agregados por nosotros / Configurados por la oficina)."
+  - "En un receptor que gestionas, usa Editar para actualizar datos o Desactivar para sacarlo de servicio en la asignación."
+  - "Durante Asignar en una reserva, elige un receptor cuando el viaje lo requiera."
+points:
+  - id: "when-needed"
+    title: "Cuándo se necesitan receptores"
+    tease: "Reservas con meet-and-greet"
+    body: "Los receptores son para viajes que necesitan a alguien en llegadas o en el lobby — no en todas las reservas. Omite la selección de receptor cuando el cliente solo necesita conductor y coche."
+    icon: "greeter"
+    related:
+      - "accept-assign"
+    image: "/images/greeters.png"
+  - id: "edit-deactivate"
+    title: "Editar y desactivar"
+    tease: "Actualizar o poner un receptor fuera de línea"
+    body: "En los receptores que gestionas (Agregados por nosotros), cada tarjeta muestra Editar (lápiz) y Desactivar (persona con barra). Editar abre el perfil de ese receptor para cambiar datos. Desactivar evita que se ofrezca en Asignar sin borrar el registro. Los receptores de la oficina pueden mostrar solo un botón de llamada."
+    icon: "check"
+    tip: "Desactiva cuando alguien no está disponible para que los operadores no lo asignen por error."
+    related:
+      - "accept-assign"
+    image: "/images/greeters.png"
+  - id: "assign-link"
+    title: "Vínculo en Asignar"
+    tease: "Elegir receptor en Detalles del viaje"
+    body: "Después de Aceptar (cuando se requiere), Asignar te permite elegir conductor, vehículo y, opcionalmente, receptor. Mantén la lista de Receptores al día para que el selector sea útil."
+    icon: "assign"
+    related:
+      - "accept-assign"
+      - "menu"
+    image: "/images/greeters.png"
+---

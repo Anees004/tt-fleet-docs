@@ -27,3 +27,4 @@ pnpm-debug.log*
 
 # Local PDF regenerate copies
 titan-fleet-operator-help-2.pdf
+.firebase/

@@ -1,0 +1,36 @@
+---
+id: "online-drivers"
+group: "start"
+title: "Conductores en línea"
+blurb: "Quién está en línea + búsqueda"
+badge: "Principal"
+badgeClass: ""
+goal: "Revisa los conductores en línea, busca a una persona y abre su perfil."
+image: "/images/home-online-drivers.png"
+icon: "drivers"
+steps:
+  - "Desde Home, abre Online (Online drivers)."
+  - "Revisa la lista — cada fila es un conductor que está en línea (punto verde en el avatar)."
+  - "Usa Search drivers… para encontrar a una persona concreta."
+  - "Toca un conductor para abrir su registro (viajes, ganancias, documentos, vehículos, activar / desactivar)."
+points:
+  - id: "online-list"
+    title: "Lista en línea"
+    tease: "Solo conductores que están en línea"
+    body: "Esta pantalla lista los conductores que están en línea ahora. Cada tarjeta muestra iniciales, nombre y teléfono, con un indicador verde de en línea. No es la plantilla completa — los conductores offline permanecen en la pestaña Drivers."
+    icon: "drivers"
+    tip: "Si alguien debería aparecer aquí y no aparece, pídele que abra la app de conductor y revise la conectividad."
+    related:
+      - "home-dashboard"
+      - "drivers"
+      - "live-map"
+    image: "/images/home-online-drivers.png"
+  - id: "search-online"
+    title: "Buscar un conductor"
+    tease: "Encuentra a una persona en la lista en línea"
+    body: "Usa Search drivers… en la parte superior para filtrar la lista en línea por nombre. Selecciona el resultado para abrir el perfil de ese conductor."
+    icon: "search"
+    related:
+      - "driver-profile"
+    image: "/images/home-online-drivers.png"
+---

@@ -1,0 +1,58 @@
+---
+import HelpLayout from "../layouts/HelpLayout.astro";
+import CategoryGrid from "../components/CategoryGrid.astro";
+import WorkflowGrid from "../components/WorkflowGrid.astro";
+import { GROUPS } from "../data/meta";
+import { getGuides } from "../i18n/guides";
+import { t } from "../i18n/ui";
+import { pdfHref, printHref, type Locale } from "../i18n/config";
+
+interface Props {
+  locale?: Locale;
+}
+
+const locale = (Astro.props.locale ?? "en") as Locale;
+const ui = t(locale);
+const guides = await getGuides(locale);
+
+const byId: Record<string, { id: string; title: string; goal: string }> = {};
+const firstByGroup: Record<string, string> = {};
+
+for (const g of GROUPS) {
+  firstByGroup[g.id] = g.first;
+}
+
+for (const g of guides) {
+  byId[g.data.id] = {
+    id: g.data.id,
+    title: g.data.title,
+    goal: g.data.goal,
+  };
+}
+---
+
+<HelpLayout title={ui.helpCenter} locale={locale} path="/">
+  <section class="hero">
+    <p class="hero-kicker">{ui.heroKicker}</p>
+    <h1>{ui.heroTitle}</h1>
+    <p>{ui.heroBody}</p>
+    <p style="margin: 1rem 0 0;">
+      <a
+        href={pdfHref(locale)}
+        download
+        style="display:inline-flex;align-items:center;gap:0.4rem;background:rgba(255,255,255,0.16);color:#fff;text-decoration:none;font-weight:600;font-size:0.9rem;padding:0.5rem 0.9rem;border-radius:999px;border:1px solid rgba(255,255,255,0.25);"
+      >
+        {ui.downloadPdf}
+      </a>
+      <a
+        href={printHref(locale)}
+        style="display:inline-flex;margin-left:0.5rem;align-items:center;color:rgba(245,248,241,0.9);font-weight:600;font-size:0.9rem;"
+      >
+        {ui.printView}
+      </a>
+    </p>
+  </section>
+
+  <CategoryGrid firstByGroup={firstByGroup} locale={locale} />
+  <WorkflowGrid byId={byId} locale={locale} />
+</HelpLayout>

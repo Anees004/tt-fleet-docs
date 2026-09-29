@@ -1,7 +1,10 @@
 ---
-import { GROUPS, docVersionLine } from "../data/meta";
+import { GROUPS, DOC_VERSION } from "../data/meta";
 import { iconSvg } from "../lib/icons";
 import ThemeToggle from "./ThemeToggle.astro";
+import LangSwitch from "./LangSwitch.astro";
+import { type Locale, localePath, pdfHref, printHref } from "../i18n/config";
+import { t, docVersionLineLocalized } from "../i18n/ui";
 
 interface GuideNav {
   id: string;
@@ -15,9 +18,22 @@ interface GuideNav {
 interface Props {
   guides: GuideNav[];
   activeId?: string | null;
+  locale?: Locale;
+  path?: string;
 }
 
-const { guides, activeId = null } = Astro.props;
+const {
+  guides,
+  activeId = null,
+  locale = "en",
+  path = "/",
+} = Astro.props;
+const ui = t(locale);
+const versionLine = docVersionLineLocalized(
+  locale,
+  DOC_VERSION.version,
+  DOC_VERSION.revised,
+);
 const searchIcon = iconSvg("search", 18);
 const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
 ---
@@ -26,7 +42,7 @@ const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" s
   class="sidebar"
   id="sidebar"
   aria-label="Help navigation"
-  transition:persist="tf-sidebar"
+  transition:persist={`tf-sidebar-${locale}`}
 >
   <div class="sidebar-brand">
     <div class="logo-mark" aria-hidden="true">
@@ -34,13 +50,13 @@ const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" s
     </div>
     <div class="brand-text">
       <strong>Titan Fleet</strong>
-      <span>Operator help</span>
+      <span>{ui.operatorHelp}</span>
     </div>
     <button
       type="button"
       class="icon-btn sidebar-close"
       id="sidebar-close"
-      aria-label="Close menu"
+      aria-label={ui.closeMenu}
       set:html={closeIcon}
     />
   </div>
@@ -51,7 +67,7 @@ const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" s
       <input
         type="search"
         id="nav-search"
-        placeholder="Search tasks…"
+        placeholder={ui.searchPlaceholder}
         autocomplete="off"
       />
     </label>
@@ -62,20 +78,21 @@ const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" s
       GROUPS.map((g) => {
         const items = guides.filter((t) => t.group === g.id);
         if (!items.length) return null;
+        const label = ui.groups[g.id]?.label ?? g.label;
         return (
           <div class="nav-group" data-group={g.id}>
-            <div class="nav-group-label">{g.label}</div>
-            {items.map((t) => (
+            <div class="nav-group-label">{label}</div>
+            {items.map((item) => (
               <a
-                class:list={["nav-item", { "is-active": t.id === activeId }]}
-                href={`/guides/${t.id}/`}
-                data-nav={t.id}
-                data-search={t.searchText}
+                class:list={["nav-item", { "is-active": item.id === activeId }]}
+                href={localePath(locale, `/guides/${item.id}/`)}
+                data-nav={item.id}
+                data-search={item.searchText}
               >
-                <span class="nav-icon" set:html={iconSvg(t.icon, 18)} />
+                <span class="nav-icon" set:html={iconSvg(item.icon, 18)} />
                 <span class="nav-item-text">
-                  <strong>{t.title}</strong>
-                  <span>{t.blurb}</span>
+                  <strong>{item.title}</strong>
+                  <span>{item.blurb}</span>
                 </span>
               </a>
             ))}
@@ -83,17 +100,25 @@ const closeIcon = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" s
         );
       })
     }
-    <p class="nav-empty" id="nav-empty">No tasks match that search.</p>
+    <p class="nav-empty" id="nav-empty">{ui.noSearchMatch}</p>
   </nav>
 
   <footer class="sidebar-foot">
     <div class="sidebar-foot-left">
-      <a class="text-link" id="nav-home" href="/">Overview</a>
-      <p class="doc-version" title={docVersionLine()}>{docVersionLine()}</p>
+      <a class="text-link" id="nav-home" href={localePath(locale, "/")}>{ui.overview}</a>
+      <p class="doc-version" title={versionLine}>{versionLine}</p>
     </div>
     <div class="sidebar-foot-actions">
-      <a class="text-link" href="/print/" target="_blank" rel="noopener">Print</a>
-      <a class="text-link" href="/titan-fleet-operator-help.pdf" download>PDF</a>
+      <LangSwitch
+        locale={locale}
+        path={path}
+        enLabel={ui.langEn}
+        esLabel={ui.langEs}
+      />
+      <a class="text-link" href={printHref(locale)} target="_blank" rel="noopener"
+        >{ui.print}</a
+      >
+      <a class="text-link" href={pdfHref(locale)} download>{ui.pdf}</a>
       <ThemeToggle />
     </div>
   </footer>

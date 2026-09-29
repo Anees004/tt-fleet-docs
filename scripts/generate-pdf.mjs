@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
- * Builds the site (if needed) and prints /print/ to public/titan-fleet-operator-help.pdf
+ * Builds the site and prints /print/ + /es/print/ to EN and ES PDFs.
  */
 import { spawn } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdir, writeFile, access, copyFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { createReadStream, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,9 +12,21 @@ import puppeteer from "puppeteer";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
-const outPdf = path.join(root, "public", "titan-fleet-operator-help.pdf");
-const outDistPdf = path.join(dist, "titan-fleet-operator-help.pdf");
-const outRootCopy = path.join(root, "titan-fleet-operator-help-2.pdf");
+
+const LOCALES = [
+  {
+    code: "en",
+    printPath: "/print/",
+    outName: "titan-fleet-operator-help.pdf",
+    footer: "Titan Fleet · Operator help · Doc v1.0.0",
+  },
+  {
+    code: "es",
+    printPath: "/es/print/",
+    outName: "titan-fleet-operator-help-es.pdf",
+    footer: "Titan Fleet · Ayuda operador · Doc v1.0.0",
+  },
+];
 
 function run(cmd, args) {
   return new Promise((resolve, reject) => {
@@ -38,6 +50,7 @@ function contentType(file) {
   if (file.endsWith(".jpg") || file.endsWith(".jpeg")) return "image/jpeg";
   if (file.endsWith(".svg")) return "image/svg+xml";
   if (file.endsWith(".woff2")) return "font/woff2";
+  if (file.endsWith(".pdf")) return "application/pdf";
   return "application/octet-stream";
 }
 
@@ -79,7 +92,6 @@ async function waitForAssets(page) {
       img.setAttribute("loading", "eager");
     });
 
-    // Force decode every screenshot before print
     const imgs = [...document.images];
     await Promise.all(
       imgs.map(
@@ -91,7 +103,6 @@ async function waitForAssets(page) {
             }
             img.addEventListener("load", () => resolve(), { once: true });
             img.addEventListener("error", () => resolve(), { once: true });
-            // Kick lazy loaders that never fired
             const src = img.currentSrc || img.src;
             if (src) img.src = src;
           }),
@@ -99,17 +110,62 @@ async function waitForAssets(page) {
     );
 
     if (document.fonts?.ready) await document.fonts.ready;
-
-    // Brief settle for layout after images
     await new Promise((r) => setTimeout(r, 400));
   });
+}
+
+async function printLocale(browser, port, locale) {
+  const url = `http://127.0.0.1:${port}${locale.printPath}`;
+  console.log(`Printing ${url}`);
+  const page = await browser.newPage();
+  await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
+  await page.goto(url, { waitUntil: "networkidle0", timeout: 180000 });
+  await page.emulateMediaType("print");
+  await waitForAssets(page);
+
+  const missing = await page.evaluate(() =>
+    [...document.images]
+      .filter((img) => !img.complete || img.naturalWidth === 0)
+      .map((img) => img.src),
+  );
+  if (missing.length) {
+    console.warn(`Warning (${locale.code}): ${missing.length} images still unloaded`);
+  } else {
+    console.log(
+      `All ${await page.evaluate(() => document.images.length)} images ready (${locale.code})`,
+    );
+  }
+
+  const pdf = await page.pdf({
+    format: "A4",
+    printBackground: true,
+    preferCSSPageSize: false,
+    margin: { top: "10mm", bottom: "14mm", left: "10mm", right: "10mm" },
+    displayHeaderFooter: true,
+    headerTemplate: "<div></div>",
+    footerTemplate: `<div style="font-size:8px;width:100%;padding:0 12mm;color:#6b7564;display:flex;justify-content:space-between;font-family:system-ui,sans-serif;"><span>${locale.footer}</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>`,
+  });
+
+  await page.close();
+
+  const outPublic = path.join(root, "public", locale.outName);
+  const outDist = path.join(dist, locale.outName);
+  await mkdir(path.dirname(outPublic), { recursive: true });
+  await writeFile(outPublic, pdf);
+  await writeFile(outDist, pdf);
+  console.log(`Wrote ${outPublic}`);
+  console.log(`Wrote ${outDist}`);
+
+  if (locale.code === "en") {
+    const rootCopy = path.join(root, "titan-fleet-operator-help-2.pdf");
+    await writeFile(rootCopy, pdf);
+    console.log(`Wrote ${rootCopy}`);
+  }
 }
 
 async function main() {
   await ensureBuild();
   const { server, port } = await startStaticServer(dist);
-  const url = `http://127.0.0.1:${port}/print/`;
-  console.log(`Printing ${url}`);
 
   const browser = await puppeteer.launch({
     headless: true,
@@ -117,42 +173,9 @@ async function main() {
   });
 
   try {
-    const page = await browser.newPage();
-    // Wide viewport so print CSS keeps desktop two-column layout
-    await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 180000 });
-    await page.emulateMediaType("print");
-    await waitForAssets(page);
-
-    const missing = await page.evaluate(() =>
-      [...document.images]
-        .filter((img) => !img.complete || img.naturalWidth === 0)
-        .map((img) => img.src),
-    );
-    if (missing.length) {
-      console.warn(`Warning: ${missing.length} images still unloaded`, missing.slice(0, 5));
-    } else {
-      console.log(`All ${await page.evaluate(() => document.images.length)} images ready`);
+    for (const locale of LOCALES) {
+      await printLocale(browser, port, locale);
     }
-
-    const pdf = await page.pdf({
-      format: "A4",
-      printBackground: true,
-      preferCSSPageSize: false,
-      margin: { top: "10mm", bottom: "14mm", left: "10mm", right: "10mm" },
-      displayHeaderFooter: true,
-      headerTemplate: "<div></div>",
-      footerTemplate:
-        '<div style="font-size:8px;width:100%;padding:0 12mm;color:#6b7564;display:flex;justify-content:space-between;font-family:system-ui,sans-serif;"><span>Titan Fleet · Operator help · Doc v1.0.0</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>',
-    });
-
-    await mkdir(path.dirname(outPdf), { recursive: true });
-    await writeFile(outPdf, pdf);
-    await writeFile(outDistPdf, pdf);
-    await writeFile(outRootCopy, pdf);
-    console.log(`Wrote ${outPdf}`);
-    console.log(`Wrote ${outDistPdf}`);
-    console.log(`Wrote ${outRootCopy}`);
   } finally {
     await browser.close();
     server.close();

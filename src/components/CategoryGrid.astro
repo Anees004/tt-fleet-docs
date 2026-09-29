@@ -1,26 +1,32 @@
 ---
 import { GROUPS } from "../data/meta";
 import { iconSvg } from "../lib/icons";
+import { type Locale, localePath } from "../i18n/config";
+import { t } from "../i18n/ui";
 
 interface Props {
   firstByGroup: Record<string, string>;
+  locale?: Locale;
 }
 
-const { firstByGroup } = Astro.props;
+const { firstByGroup, locale = "en" } = Astro.props;
+const ui = t(locale);
 ---
 
-<p class="section-label">Browse by category</p>
+<p class="section-label">{locale === "es" ? "Explorar por categoría" : "Browse by category"}</p>
 <div class="category-grid">
   {
     GROUPS.map((g) => {
       const href = firstByGroup[g.id]
-        ? `/guides/${firstByGroup[g.id]}/`
-        : "/";
+        ? localePath(locale, `/guides/${firstByGroup[g.id]}/`)
+        : localePath(locale, "/");
+      const label = ui.groups[g.id]?.label ?? g.label;
+      const desc = ui.groups[g.id]?.desc ?? g.desc;
       return (
         <a class="category-tile" href={href}>
           <div class="tile-icon" set:html={iconSvg(g.icon, 18)} />
-          <strong>{g.label}</strong>
-          <span>{g.desc}</span>
+          <strong>{label}</strong>
+          <span>{desc}</span>
         </a>
       );
     })

@@ -1,0 +1,37 @@
+---
+id: "menu"
+group: "start"
+title: "Menú lateral"
+blurb: "Accede a Greeters, Live Map, Settings…"
+badge: "Principal"
+badgeClass: ""
+goal: "Abre el cajón para pantallas que no están en las pestañas inferiores."
+image: "/images/dh-sim-booted.png"
+icon: "menu"
+steps:
+  - "Toca el menú hamburguesa (☰) arriba a la izquierda de Home u otras pestañas principales."
+  - "Desplázate por la lista del cajón hasta la pantalla que necesitas."
+  - "Toca un elemento — Live Map, Greeters, Documents, Performance, Calendar, Earnings, Reports o Settings."
+  - "Usa el mismo hamburguesa (o atrás) para salir de esa pantalla."
+points:
+  - id: "hamburger"
+    title: "El hamburguesa abre el cajón"
+    tease: "Control de menú arriba a la izquierda"
+    body: "El icono de tres líneas abre la navegación lateral. Las pestañas inferiores cubren Home, Drivers, Vehicles y Bookings; todo lo demás vive en este cajón. Elementos típicos: Greeters, Documents, Performance, Calendar, Earnings, Reports, Live Map, Settings. Las etiquetas pueden variar un poco según la versión de la app, pero el patrón es el mismo — las herramientas secundarias están aquí."
+    icon: "menu"
+    related:
+      - "home-dashboard"
+      - "greeters"
+      - "settings"
+      - "live-map"
+    image: "/images/drawer.png"
+  - id: "vs-tabs"
+    title: "Cajón vs pestañas inferiores"
+    tease: "Cuándo usar cada uno"
+    body: "Usa las pestañas inferiores para el trabajo diario de la flota (Home, Drivers, Vehicles, Bookings). Usa el cajón para herramientas de apoyo y Live Map cuando no estés ya en Home."
+    icon: "eye"
+    related:
+      - "bookings-list"
+      - "drivers"
+    image: "/images/dh-sim-booted.png"
+---

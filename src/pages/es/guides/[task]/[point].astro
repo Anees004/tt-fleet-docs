@@ -1,0 +1,17 @@
+---
+import GuidePointPage from "../../../../components/GuidePointPage.astro";
+import { getGuides } from "../../../../i18n/guides";
+
+export async function getStaticPaths() {
+  const guides = await getGuides("es");
+  return guides.flatMap((g) =>
+    (g.data.points || []).map((p) => ({
+      params: { task: g.data.id, point: p.id },
+    })),
+  );
+}
+
+const { task, point } = Astro.params;
+---
+
+<GuidePointPage locale="es" task={task!} point={point!} />
