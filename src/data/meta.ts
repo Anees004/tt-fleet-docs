@@ -84,10 +84,14 @@ export const DOC_VERSION = {
   /** Semver for the operator help document set */
   version: "1.0.0",
   /** ISO date of this document release */
-  revised: "2026-09-26",
+  revised: "2026-09-29",
   label: "Titan Fleet Operator Help",
 } as const;
 
 export function docVersionLine(): string {
-  return `${DOC_VERSION.label} · Doc v${DOC_VERSION.version} · Revised ${DOC_VERSION.revised}`;
+  const revised = new Date(`${DOC_VERSION.revised}T00:00:00Z`).toLocaleDateString(
+    "en-GB",
+    { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+  );
+  return `${DOC_VERSION.label} · Doc v${DOC_VERSION.version} · Revised ${revised}`;
 }

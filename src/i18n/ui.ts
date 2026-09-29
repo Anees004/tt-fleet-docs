@@ -144,6 +144,15 @@ export function groupLabelLocalized(locale: Locale, id: string): string {
   return GROUPS.find((x) => x.id === id)?.label ?? id;
 }
 
+export function formatRevisedDate(locale: Locale, isoDate: string): string {
+  const [y, m, d] = isoDate.split("-").map(Number);
+  if (!y || !m || !d) return isoDate;
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(
+    locale === "es" ? "es-ES" : "en-GB",
+    { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" },
+  );
+}
+
 export function docVersionLineLocalized(locale: Locale, version: string, revised: string): string {
-  return `${t(locale).docLabel} · Doc v${version} · ${revised}`;
+  return `${t(locale).docLabel} · Doc v${version} · ${formatRevisedDate(locale, revised)}`;
 }
