@@ -355,6 +355,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
       .no-print {
         margin-bottom: 1.5rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.65rem;
       }
       .no-print a {
         display: inline-block;
@@ -365,6 +369,11 @@ const generated = new Date().toLocaleDateString("en-GB", {
         border-radius: 8px;
         font-weight: 600;
         font-size: 0.9rem;
+      }
+      .no-print a.secondary {
+        background: transparent;
+        color: var(--olive);
+        border: 1.5px solid var(--olive);
       }
 
       @media print {
@@ -458,7 +467,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
   <body>
     <div class="doc">
       <p class="no-print">
-        <a href="/">← Back to help center</a>
+        <a class="secondary" href="/">← Back to help center</a>
+        <a href="/titan-fleet-operator-help.pdf" download="titan-fleet-operator-help.pdf"
+          >Download PDF</a
+        >
       </p>
 
       <header class="cover" id="cover">
