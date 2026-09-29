@@ -33,7 +33,7 @@ const relatedById = Object.fromEntries(
 
 const backIcon = iconSvg("chevron", 14);
 const paras = pt.body.split(/\n+/).filter(Boolean);
-const pointHighlights = getHighlights(d.id, pt.id, pt.image || d.image);
+const pointHighlights = getHighlights(d.id, pt.id, pt.image || d.image, locale);
 const path = `/guides/${d.id}/${pt.id}/`;
 ---
 

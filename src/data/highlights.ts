@@ -4,6 +4,9 @@
  * Key: `${guideId}` or `${guideId}/${pointId}`
  * A guide overview may use several rectangles (array).
  */
+import type { Locale } from "../i18n/config";
+import { localizeHighlightLabel } from "../i18n/highlightLabels";
+
 export type HighlightBox = {
   x: number;
   y: number;
@@ -526,21 +529,33 @@ function basename(src: string): string {
   return src.split("/").pop() || src;
 }
 
+function withLocale(boxes: HighlightBox[], locale: Locale): HighlightBox[] {
+  if (locale === "en") return boxes;
+  return boxes.map((b) => ({
+    ...b,
+    label: localizeHighlightLabel(b.label, locale),
+  }));
+}
+
 /** All highlight rectangles for a guide or point (empty if none). */
 export function getHighlights(
   guideId: string,
   pointId?: string | null,
   imageSrc?: string | null,
+  locale: Locale = "en",
 ): HighlightBox[] {
   const key = pointId ? `${guideId}/${pointId}` : guideId;
+  let boxes: HighlightBox[] = [];
   if (imageSrc) {
     const byImg = HIGHLIGHTS_BY_IMAGE[`${basename(imageSrc)}::${key}`];
-    if (byImg) return asList(byImg);
+    if (byImg) boxes = asList(byImg);
   }
-  const direct = HIGHLIGHTS[key];
-  if (direct) return asList(direct);
-  if (pointId) return asList(HIGHLIGHTS[guideId]);
-  return [];
+  if (!boxes.length) {
+    const direct = HIGHLIGHTS[key];
+    if (direct) boxes = asList(direct);
+    else if (pointId) boxes = asList(HIGHLIGHTS[guideId]);
+  }
+  return withLocale(boxes, locale);
 }
 
 /** First highlight only (legacy single-box call sites). */
@@ -548,6 +563,7 @@ export function getHighlight(
   guideId: string,
   pointId?: string | null,
   imageSrc?: string | null,
+  locale: Locale = "en",
 ): HighlightBox | null {
-  return getHighlights(guideId, pointId, imageSrc)[0] ?? null;
+  return getHighlights(guideId, pointId, imageSrc, locale)[0] ?? null;
 }

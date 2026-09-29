@@ -22,7 +22,7 @@ if (!entry) {
 const d = entry.data;
 const ui = t(locale);
 const badgeClass = ["badge", d.badgeClass].filter(Boolean).join(" ");
-const heroHighlights = getHighlights(d.id, null, d.image);
+const heroHighlights = getHighlights(d.id, null, d.image, locale);
 const path = `/guides/${d.id}/`;
 ---
 

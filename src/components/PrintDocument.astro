@@ -522,7 +522,7 @@ const homeUrl = localePath(locale, "/");
       {
         guides.map((entry, idx) => {
           const d = entry.data;
-          const heroHls = getHighlights(d.id, null, d.image);
+          const heroHls = getHighlights(d.id, null, d.image, locale);
           const prev = idx > 0 ? guides[idx - 1].data : null;
           const groupStart = !prev || prev.group !== d.group;
           const isCore = ["core", "principal"].includes(
@@ -574,7 +574,7 @@ const homeUrl = localePath(locale, "/");
                 <section class="points">
                   {d.points.map((p) => {
                     const shot = p.image || d.image;
-                    const hls = getHighlights(d.id, p.id, shot);
+                    const hls = getHighlights(d.id, p.id, shot, locale);
                     return (
                       <div class="point" id={`point-${d.id}-${p.id}`}>
                         <div class="point-grid">
