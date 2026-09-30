@@ -1,5 +1,6 @@
 ---
 import type { HighlightBox } from "../data/highlights";
+import { getImageCovers } from "../data/covers";
 
 /** Dark red — readable on light screenshots and in PDF. */
 const HL = "#8B1A1A";
@@ -33,6 +34,7 @@ const boxes: HighlightBox[] =
       ? [highlight]
       : [];
 
+const covers = getImageCovers(src);
 const multi = boxes.length > 1;
 
 type Side = "above" | "below" | "left" | "right" | "inside";
@@ -113,6 +115,15 @@ function labelInlineStyle(h: HighlightBox, side: Side): string {
       decoding="sync"
     />
     {
+      covers.map((c) => (
+        <div
+          class="ss-cover"
+          style={`left:${c.x}%;top:${c.y}%;width:${c.w}%;height:${c.h}%;background:${c.color || "#fff"};`}
+          aria-hidden="true"
+        />
+      ))
+    }
+    {
       boxes.map((box) => {
         const side = labelSide(box);
         return (
@@ -174,5 +185,13 @@ function labelInlineStyle(h: HighlightBox, side: Side): string {
   .hl-box.multi {
     background: transparent;
     box-shadow: none;
+  }
+  .ss-cover {
+    position: absolute;
+    z-index: 2;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    pointer-events: none;
   }
 </style>
