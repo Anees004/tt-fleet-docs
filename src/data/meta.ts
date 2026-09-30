@@ -84,7 +84,7 @@ export const DOC_VERSION = {
   /** Semver for the operator help document set */
   version: "1.0.0",
   /** ISO date of this document release */
-  revised: "2026-09-29",
+  revised: "2026-09-30",
   label: "Titan Fleet Operator Help",
 } as const;
 

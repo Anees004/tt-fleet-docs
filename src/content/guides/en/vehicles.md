@@ -11,7 +11,7 @@ icon: "vehicles"
 steps:
   - "Open the Vehicles bottom tab."
   - "Filter with All / Active / Inactive chips or search."
-  - "Tap a vehicle card to open Edit Vehicle — set Active / Inactive, edit details, manage documents, or delete."
+  - "Tap a vehicle card to open Edit Vehicle — set Active / Inactive, edit details, and manage documents."
   - "Use + to register a new vehicle."
 points:
   - id: "status-chips"
@@ -42,7 +42,7 @@ points:
   - id: "edit-docs-delete"
     title: "Upload vehicle documents"
     tease: "Attach files on Edit Vehicle"
-    body: "On Edit Vehicle, scroll to Vehicle Documents and Upload or Replace files (JPG, PNG, or PDF, up to 10 MB) for Insurance, Registration, Inspection, and Transport Licence. Those uploads then appear in side menu → Documents for View, Download, Remove, and status (Pending / Approved / Rejected). Delete vehicle at the bottom removes the car from the fleet — not a single document."
+    body: "On Edit Vehicle, scroll to Vehicle Documents and Upload or Replace files (JPG, PNG, or PDF, up to 10 MB) for Insurance, Registration, Inspection, and Transport Licence. Those uploads then appear in side menu → Documents for View, Download, and status (Pending / Approved / Rejected)."
     icon: "docs"
     tip: "Use Documents hub to clear Pending and fix Rejected; use Edit Vehicle when you need to replace a file for that car."
     related:

@@ -71,13 +71,13 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   /* ---------- Driver profile (each point uses its own scrolled screenshot) ---------- */
   // "driver-profile": { x: 3, y: 48.5, w: 94, h: 38, label: "Performance cards" },
   "driver-profile/records": { x: 3, y: 48.5, w: 94, h: 38, label: "Rides & money" },
-  /* driver-detail.png — Deactivate + Remove (above Quality Score cards) */
+  /* driver-detail.png — Deactivate / Activate (above Quality Score cards) */
   "driver-profile/activate-deactivate": {
     x: 6,
     y: 27,
     w: 88,
     h: 17,
-    label: "Deactivate / Remove",
+    label: "Deactivate / Activate",
     side: "above",
   },
   /* driver-vehicles.png — Vehicle Assignment block */
@@ -125,10 +125,9 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     { x: 5, y: 35, w: 90, h: 56, label: "Edit Vehicle Details", side: "above" },
     { x: 5, y: 22.5, w: 90, h: 7, label: "Active / Inactive", side: "above" },
   ],
-  /* edit_vehicle_delete_documentadd.png — docs + delete */
+  /* edit_vehicle_delete_documentadd.png — vehicle documents */
   "vehicles/edit-docs-delete": [
     { x: 4, y: 9.5, w: 92, h: 72, label: "Add/replace docs", side: "above" },
-    { x: 2, y: 91.5, w: 95, h: 6, label: "Delete vehicle", side: "above" },
   ],
   "vehicles/add-vehicle": { x: 82, y: 81.5, w: 16, h: 7, label: "Add (+)" },
 
@@ -243,11 +242,10 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   ],
   "documents/card-actions": [
     { x: 4, y: 26, w: 92, h: 14, label: "Document card", side: "left" },
-    { x: 68, y: 34, w: 28, h: 5, label: "View / Download / Remove", side: "left" },
+    { x: 68, y: 34, w: 28, h: 5, label: "View / Download", side: "left" },
   ],
   "documents/where-upload": [
     { x: 4, y: 9.5, w: 92, h: 72, label: "Upload / Replace", side: "inside" },
-    { x: 5, y: 91.5, w: 90, h: 5, label: "Delete vehicle", side: "above" },
   ],
   /* legacy keys if linked elsewhere */
   "documents/what-belongs": [
@@ -393,7 +391,6 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     { x: 4, y: 46, w: 92, h: 5.5, label: "Privacy", side: "left" },
     { x: 4, y: 52, w: 92, h: 5.5, label: "Recent Activity", side: "left" },
     { x: 4, y: 60.5, w: 92, h: 4.8, label: "Sign Out", side: "above" },
-    { x: 4, y: 66, w: 92, h: 5.2, label: "Delete Account", side: "above" },
   ],
   "settings/fleet-information": {
     x: 4,
@@ -426,14 +423,6 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
     side: "below",
   },
   "settings/sign-out": { x: 4, y: 60.5, w: 92, h: 4.8, label: "Sign Out", side: "above" },
-  "settings/delete-account": {
-    x: 4,
-    y: 66,
-    w: 92,
-    h: 5.2,
-    label: "Delete Account",
-    side: "above",
-  },
   /* legacy */
   "settings/who-changes": [
     { x: 4, y: 14, w: 92, h: 5.5, label: "Fleet Information", side: "left" },
@@ -493,7 +482,6 @@ export const HIGHLIGHTS_BY_IMAGE: Record<string, HighlightDef> = {
   ],
   "edit_vehicle_delete_documentadd.png::documents/where-upload": [
     { x: 4, y: 9.5, w: 92, h: 72, label: "Upload / Replace", side: "inside" },
-    { x: 5, y: 92.5, w: 90, h: 5, label: "Delete vehicle", side: "above" },
   ],
   /* Reports: CTA on main screen vs confirm dialogue */
   "reports.png::reports/generate-download": {

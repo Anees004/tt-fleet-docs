@@ -13,7 +13,7 @@ steps:
   - "Revisa el encabezado (Approved / Online) y las tarjetas de rendimiento — ganancias, viajes, cancelaciones, calificación, finalización."
   - "Desplázate a Vehicle Assignment para asignar, desasignar, hacer check in o check out de vehículos."
   - "En Documents, sube o reemplaza archivos (JPG, PNG o PDF, hasta 10 MB por tipo) y espera la revisión cuando sea necesario."
-  - "Usa Deactivate / Activate (o Remove) cuando necesites cambiar el estado de ese conductor."
+  - "Usa Deactivate / Activate cuando necesites cambiar el estado de ese conductor."
 points:
   - id: "records"
     title: "Registros de viajes y dinero"
@@ -26,9 +26,9 @@ points:
       - "online-drivers"
     image: "/images/driver-detail.png"
   - id: "activate-deactivate"
-    title: "Activate / Deactivate / Remove"
+    title: "Activate / Deactivate"
     tease: "Cambia el estado de este conductor"
-    body: "Desde el perfil, toca Deactivate para sacar a un conductor del trabajo activo, o Activate cuando deba volver a trabajar. Remove los elimina de forma permanente de la flota cuando eso es lo que pretendes — confirma con cuidado."
+    body: "Desde el perfil, toca Deactivate para sacar a un conductor del trabajo activo, o Activate cuando deba volver a trabajar."
     icon: "check"
     tip: "Para varios conductores a la vez, usa la selección múltiple en la pestaña Drivers."
     warn: true

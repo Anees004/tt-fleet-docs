@@ -11,7 +11,7 @@ icon: "vehicles"
 steps:
   - "Abre la pestaña inferior Vehículos."
   - "Filtra con los chips Todos / Activos / Inactivos o busca."
-  - "Toca la tarjeta de un vehículo para abrir Editar vehículo — define Activo / Inactivo, edita datos, gestiona documentos o elimina."
+  - "Toca la tarjeta de un vehículo para abrir Editar vehículo — define Activo / Inactivo, edita datos y gestiona documentos."
   - "Usa + para registrar un vehículo nuevo."
 points:
   - id: "status-chips"
@@ -42,7 +42,7 @@ points:
   - id: "edit-docs-delete"
     title: "Subir documentos del vehículo"
     tease: "Adjuntar archivos en Editar vehículo"
-    body: "En Editar vehículo, baja hasta Documentos del vehículo y Sube o Reemplaza archivos (JPG, PNG o PDF, hasta 10 MB) de Seguro, Matriculación, Inspección y Licencia de transporte. Esas subidas aparecen luego en menú lateral → Documentos para Ver, Descargar, Eliminar y estado (Pendiente / Aprobado / Rechazado). Eliminar vehículo al final quita el coche de la flota — no un solo documento."
+    body: "En Editar vehículo, baja hasta Documentos del vehículo y Sube o Reemplaza archivos (JPG, PNG o PDF, hasta 10 MB) de Seguro, Matriculación, Inspección y Licencia de transporte. Esas subidas aparecen luego en menú lateral → Documentos para Ver, Descargar y estado (Pendiente / Aprobado / Rechazado)."
     icon: "docs"
     tip: "Usa el centro de Documentos para resolver Pendientes y corregir Rechazados; usa Editar vehículo cuando necesites reemplazar un archivo de ese coche."
     related:

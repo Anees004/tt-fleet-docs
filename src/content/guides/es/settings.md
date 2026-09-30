@@ -13,7 +13,7 @@ steps:
   - "Usa las filas de Cuenta para info de flota, perfil y contraseña."
   - "Usa Idioma y apariencia para tema e idioma."
   - "Abre Privacidad o Actividad reciente en Soporte cuando lo necesites."
-  - "Cerrar sesión para salir de este dispositivo; Eliminar cuenta solo cuando quieras quitar la cuenta de verdad."
+  - "Cerrar sesión para salir de este dispositivo cuando hayas terminado."
 points:
   - id: "fleet-information"
     title: "Información de la flota"
@@ -69,13 +69,4 @@ points:
     image: "/images/settings2.png"
     related:
       - "sign-in"
-  - id: "delete-account"
-    title: "Eliminar cuenta"
-    tease: "Permanente — úsalo con cuidado"
-    body: "Inicia la eliminación de la cuenta. Es destructivo: quita el acceso de esta cuenta de forma permanente (sigue con cuidado cualquier confirmación). Los operadores del día a día no deberían usarlo salvo que un admin de flota lo pida explícitamente. Prefiere Cerrar sesión cuando solo necesites dejar el dispositivo."
-    icon: "x"
-    warn: true
-    image: "/images/settings2.png"
-    related:
-      - "rules"
 ---

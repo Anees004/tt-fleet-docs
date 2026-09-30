@@ -13,7 +13,7 @@ steps:
   - "Review the header (Approved / Online) and performance cards — earnings, trips, cancellations, rating, completion."
   - "Scroll to Vehicle Assignment to assign, unassign, check in, or check out vehicles."
   - "In Documents, upload or replace files (JPG, PNG, or PDF, up to 10 MB per type) and wait for review where needed."
-  - "Use Deactivate / Activate (or Remove) when you need to change that driver’s status."
+  - "Use Deactivate / Activate when you need to change that driver’s status."
 points:
   - id: "records"
     title: "Rides & money records"
@@ -26,9 +26,9 @@ points:
       - "online-drivers"
     image: "/images/driver-detail.png"
   - id: "activate-deactivate"
-    title: "Activate / Deactivate / Remove"
+    title: "Activate / Deactivate"
     tease: "Change status for this driver"
-    body: "From the profile, tap Deactivate to take a driver out of active work, or Activate when they should work again. Remove permanently deletes them from the fleet when that is what you intend — confirm carefully."
+    body: "From the profile, tap Deactivate to take a driver out of active work, or Activate when they should work again."
     icon: "check"
     tip: "For several drivers at once, use multi-select on the Drivers tab instead."
     warn: true

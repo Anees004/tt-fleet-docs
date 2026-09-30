@@ -13,7 +13,7 @@ steps:
   - "Use Account rows for fleet info, profile, and password."
   - "Use Language & Appearance for theme and language."
   - "Open Privacy or Recent Activity under Support when needed."
-  - "Sign Out to leave this device; Delete Account only when you mean to remove the account."
+  - "Sign Out to leave this device when you are done."
 points:
   - id: "fleet-information"
     title: "Fleet Information"
@@ -69,13 +69,4 @@ points:
     image: "/images/settings2.png"
     related:
       - "sign-in"
-  - id: "delete-account"
-    title: "Delete Account"
-    tease: "Permanent — use with care"
-    body: "Starts account deletion. This is destructive: it removes this account access permanently (follow any confirm prompts carefully). Day-to-day operators should not use this unless a fleet admin explicitly asks. Prefer Sign Out when you only need to leave the device."
-    icon: "x"
-    warn: true
-    image: "/images/settings2.png"
-    related:
-      - "rules"
 ---
