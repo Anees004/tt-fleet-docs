@@ -31,7 +31,6 @@ export const HIGHLIGHT_LABEL_ES: Record<string, string> = {
   "Day detail": "Detalle del día",
   Deactivate: "Desactivar",
   "Deactivate / Activate": "Desactivar / Activar",
-  "View / Download": "Ver / Descargar",
   "Doc type tabs": "Pestañas de tipo",
   "Document card": "Tarjeta de documento",
   "Document cards": "Tarjetas de documentos",
