@@ -122,7 +122,7 @@ export const HIGHLIGHT_LABEL_ES: Record<string, string> = {
   "Vehicle cards": "Tarjetas de vehículos",
   "Vehicle document cards": "Docs del vehículo",
   Vehicles: "Vehículos",
-  "View / Download / Remove": "Ver / Descargar / Quitar",
+  "View / Download": "Ver / Descargar",
   "View statement": "Ver extracto",
 };
 
