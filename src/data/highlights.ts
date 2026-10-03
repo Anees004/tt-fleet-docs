@@ -56,7 +56,6 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
   "home-dashboard/kpi-cards": { x: 4, y: 39, w: 92, h: 24, label: "KPI cards" },
   "home-dashboard/period-default": { x: 4, y: 31.5, w: 92, h: 6.5, label: "Performance period" },
   "home-dashboard/period-presets": { x: 4, y: 31.5, w: 62, h: 6.5, label: "Presets" },
-  /* Custom chip on dh; period-custom point may use home.png (one-day) — see override below via image map */
   "home-dashboard/period-custom": { x: 64, y: 31.5, w: 30, h: 6.5, label: "Custom" },
   "home-dashboard/hourly-charts": { x: 4, y: 64.5, w: 92, h: 22, label: "Earnings chart" },
   "home-dashboard/online-entry": { x: 4, y: 12.5, w: 92, h: 16.5, label: "Online / Offline" },
@@ -440,15 +439,6 @@ export const HIGHLIGHTS: Record<string, HighlightDef> = {
 
 /** When the same point uses a different screenshot, override by image basename. */
 export const HIGHLIGHTS_BY_IMAGE: Record<string, HighlightDef> = {
-  /* period-custom on home.png = one-day result, not the Custom chip */
-  "home.png::home-dashboard/period-custom": {
-    x: 4,
-    y: 11,
-    w: 92,
-    h: 26,
-    label: "Custom day result",
-  },
-  /* Closed theme/language pills on plain login.png (if ever used) */
   "login.png::sign-in/theme-on-login": { x: 4, y: 6.5, w: 26, h: 4, label: "Theme" },
   "login.png::sign-in/language-on-login": { x: 70, y: 6.5, w: 24, h: 4, label: "Language" },
   /* Menu: Home hero vs open-drawer hamburger point */
